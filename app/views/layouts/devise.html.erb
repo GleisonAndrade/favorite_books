@@ -13,9 +13,9 @@
 
   <body class="app app-login p-0">
     <div class="row g-0 app-auth-wrapper">
+      <%= render "layouts/shared/alertas" %>
       <div class="auth-main-col text-center p-5"> <!-- col-12 col-md-7 col-lg-6 -->
         <div class="d-flex flex-column align-content-end">
-
           <!-- CONTEUDO PRINCIPAL -->
           <%= content_for?(:content) ? yield(:content) : yield %>
 
