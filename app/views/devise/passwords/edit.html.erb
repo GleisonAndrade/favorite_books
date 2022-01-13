@@ -1,25 +1,39 @@
-<h2>Change your password</h2>
+<%= render "devise/shared/error_messages", resource: resource %>
 
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
-  <%= f.hidden_field :reset_password_token %>
+<div class="app-auth-body mx-auto">	
+	<div class="app-auth-branding mb-4">
+		<a class="app-logo" href="<%= root_path %>">
+			<%= image_pack_tag "media/images/app-logo.svg", class: "logo-icon me-2" %>
+		</a>
+	</div>
 
-  <div class="field">
-    <%= f.label :password, "New password" %><br />
-    <% if @minimum_password_length %>
-      <em>(<%= @minimum_password_length %> characters minimum)</em><br />
-    <% end %>
-    <%= f.password_field :password, autofocus: true, autocomplete: "new-password" %>
-  </div>
+	<h2 class="auth-heading text-center mb-4">Alteração de Senha</h2>					
 
-  <div class="field">
-    <%= f.label :password_confirmation, "Confirm new password" %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
+  <div class="auth-form-container text-start mx-auto">
+    <%= form_for(resource, as: resource_name, url: password_path(resource_name), class: "auth-form auth-signup-form", html: { method: :put }) do |f| %>
+      <%= f.hidden_field :reset_password_token %>
 
-  <div class="actions">
-    <%= f.submit "Change my password" %>
-  </div>
-<% end %>
+      <div class="mb-3">
+        <%= f.label :password, class: "sr-only" %>
+        <%= f.password_field :password, class: "form-control", placeholder: true, require: true %>
+        <% if @minimum_password_length %>
+          <div id="passwordhelp" class="form-text">A senha deve conter no mínimo <%= @minimum_password_length %> caracteres.</div>
+        <% end %>
+      </div>
 
-<%= render "devise/shared/links" %>
+      <div class="mb-3">
+        <%= f.label :password_confirmation, class: "sr-only" %>
+        <%= f.password_field :password_confirmation, class: "form-control", placeholder: true, require: true %>
+      </div>
+
+      <div class="text-center">
+        <%= f.submit "Atualizar Senha", class: "btn app-btn-primary w-100 theme-btn mx-auto" %>
+      </div>
+    <% end %><!--//auth-form-->
+
+    <div class="auth-option text-center pt-5">
+      <%= link_to "Entrar", new_session_path(resource_name), class: "app-link" %> <span class="px-2">|</span> 
+      <%= link_to "Cadastrar", new_registration_path(resource_name), class: "app-link" %>
+    </div>
+  </div><!--//auth-form-container-->					    
+</div>
