@@ -1,0 +1,18 @@
+<div class="app-utility-item app-user-dropdown dropdown">
+  <a class="dropdown-toggle" id="user-dropdown-toggle" data-bs-toggle="dropdown" 
+  href="#" role="button" aria-expanded="false"><%= image_pack_tag "user.png", alt: "user profile" %></a>
+  <ul class="dropdown-menu" aria-labelledby="user-dropdown-toggle">
+    <li>
+      <%= link_to edit_user_registration_path, class: "dropdown-item" do%>
+          <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Editar Perfil
+      <%end%>
+    </li>
+    <!--li><a class="dropdown-item" href="settings.html">Settings</a></li -->
+    <li><hr class="dropdown-divider"></li>
+    <li>
+      <%= link_to destroy_user_session_path, method: "delete", class: "dropdown-item" do%>
+        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Sair
+      <%end%>
+    </li>
+  </ul>
+</div><!--//app-user-dropdown-->  
