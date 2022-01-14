@@ -1,42 +1,15 @@
-<%= form_with(model: book) do |form| %>
-  <% if book.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(book.errors.count, "error") %> prohibited this book from being saved:</h2>
+<%= simple_form_for book do |f| %>
+  <%= f.input :title, required: true  %>
+  <%= f.input :description, as: :text, required: true, input_html: { rows: 10 } %>
+  <%= f.input :image_url, required: true %>
+  <%= f.input :page_count, as: :integer, required: true %>
+  <%= f.input :author, required: true %>
 
-      <ul>
-        <% book.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+  <div class="row align-items-end mt-2">
+    <div class="btn-group col-md-12">
+      <%= f.button :submit, class: "btn app-btn-primary" %>
+      <%= link_to 'Cancelar', books_path, class: "btn app-btn-secondary" %>
     </div>
-  <% end %>
-
-  <div class="field">
-    <%= form.label :title %>
-    <%= form.text_field :title %>
   </div>
-
-  <div class="field">
-    <%= form.label :description %>
-    <%= form.text_area :description %>
-  </div>
-
-  <div class="field">
-    <%= form.label :image_url %>
-    <%= form.text_field :image_url %>
-  </div>
-
-  <div class="field">
-    <%= form.label :page_count %>
-    <%= form.number_field :page_count %>
-  </div>
-
-  <div class="field">
-    <%= form.label :author %>
-    <%= form.text_field :author %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
+</div>
 <% end %>
