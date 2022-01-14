@@ -1,35 +1,78 @@
-<p id="notice"><%= notice %></p>
+<div class="row g-3 mb-4 align-items-center justify-content-between">
+  <div class="col-auto">
+    <h1 class="app-page-title mb-0">Livros</h1>
+  </div>
+  <div class="col-auto">
+    <div class="page-utilities">
+      <div class="row g-2 justify-content-start justify-content-md-end align-items-center">
+        <div class="col-auto">
+          <form class="table-search-form row gx-1 align-items-center">
+            <div class="col-auto">
+              <input type="text" id="search-orders" name="searchorders" class="form-control search-orders" placeholder="Texto contido no título e descrição">
+            </div>
+            <div class="col-auto">
+              <button type="submit" class="btn app-btn-secondary">Buscar</button>
+            </div>
+          </form>                
+        </div><!--//col-->
 
-<h1>Books</h1>
+        <div class="col-auto">          
+          <select class="form-select w-auto">
+            <option value="option-1">Recentemente adicionado</option>
+            <option value="option-2">Mais antigo</option>
+            <option value="option-3">Título A-Z</option>
+            <option value="option-4">Título Z-A</option>            
+          </select>
+        </div>
 
-<table>
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th>Description</th>
-      <th>Image url</th>
-      <th>Page count</th>
-      <th>Author</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+        <div class="col-auto">
+          <%= link_to new_book_path, class: "btn app-btn-primary" do -%>						    
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
+            </svg>
+            Novo Livro
+          </a>
+          <% end %>
+        </div>
+      </div><!--//row-->
+    </div><!--//table-utilities-->
+  </div><!--//col-auto-->
+</div>
 
-  <tbody>
-    <% @books.each do |book| %>
-      <tr>
-        <td><%= book.title %></td>
-        <td><%= book.description %></td>
-        <td><%= book.image_url %></td>
-        <td><%= book.page_count %></td>
-        <td><%= book.author %></td>
-        <td><%= link_to 'Show', book %></td>
-        <td><%= link_to 'Edit', edit_book_path(book) %></td>
-        <td><%= link_to 'Destroy', book, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<!-- Por tab bar com favoritos no futuro -->
 
-<br>
-
-<%= link_to 'New Book', new_book_path %>
+<div class="tab-content" id="orders-table-tab-content">
+  <div class="tab-pane fade show active" id="orders-all" role="tabpanel" aria-labelledby="orders-all-tab">
+    <div class="app-card app-card-orders-table shadow-sm mb-5">
+      <div class="app-card-body">
+        <div class="table-responsive">
+          <table class="table app-table-hover mb-0 text-left">
+            <thead>
+              <tr>
+                <th class="cell">Título</th>
+                <th class="cell">Author</th>
+                <th class="cell">Páginas</th>
+                <th class="cell">Adição</th>
+                <th class="cell"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @books.each do |book| %>
+                <tr>
+                  <td class="cell"><span class="truncate"><%= book.title %></span></td>
+                  <td class="cell"><span class="truncate"><%= book.author %></span></td>
+                  <td class="cell"><%= book.page_count %></td>
+                  <td class="cell"><span><%= I18n.l book.created_at, format: "%d de %B" %></span><span class="note"><%= I18n.l book.created_at, format: "%H:%M" %></span></td>
+                  <td class="cell">
+                    <%= link_to 'Show', book, class: "btn-sm app-btn-secondary" %>
+                    <%= link_to 'Edit', edit_book_path(book), class: "btn-sm app-btn-secondary" %>
+                    <%= link_to 'Destroy', book, class: "btn-sm btn-danger", method: :delete, data: { confirm: 'Você deseja continuar?' } %>
+                  </td>
+                </tr>
+              <% end %>
+          </table>
+        </div><!--//table-responsive-->
+      </div><!--//app-card-body-->		
+    </div><!--//app-card-->
+  </div><!--//tab-pane-->
+</div>

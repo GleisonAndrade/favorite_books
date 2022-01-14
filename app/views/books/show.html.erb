@@ -1,29 +1,57 @@
-<p id="notice"><%= notice %></p>
+<!--h1 class="app-page-title"><%#= @book.title %></h1>
+<hr class="mb-4" -->
 
-<p>
-  <strong>Title:</strong>
-  <%= @book.title %>
-</p>
+<div class="row g-4">
+  <div class="col-md-12">
+    <div class="app-card app-card-settings shadow-sm p-4">
+      <div class="app-card-thumb">
+        <img class="fb-image-cover mx-auto d-block" src="<%= @book.image_url %>" alt="<%= @book.title %>">
+      </div>
 
-<p>
-  <strong>Description:</strong>
-  <%= @book.description %>
-</p>
+      <div class="app-card-body">
+        <div class="item border-bottom py-3">
+          <div class="row justify-content-between align-items-center">
+            <div class="col-auto">
+              <div class="item-label"><strong>Título</strong></div>
+              <div class="item-data"><%= @book.title %></div>
+            </div><!--//col-->
+          </div><!--//row-->
+        </div>
 
-<p>
-  <strong>Image url:</strong>
-  <%= @book.image_url %>
-</p>
+        <div class="item border-bottom py-3">
+          <div class="row justify-content-between align-items-center">
+            <div class="col-auto">
+              <div class="item-label"><strong>Descrição</strong></div>
+              <div class="item-data"><%= @book.description %></div>
+            </div><!--//col-->
+          </div><!--//row-->
+        </div>
 
-<p>
-  <strong>Page count:</strong>
-  <%= @book.page_count %>
-</p>
+        <div class="item border-bottom py-3">
+          <div class="row justify-content-between align-items-center">
+            <div class="col-auto">
+              <div class="item-label"><strong>Author</strong></div>
+              <div class="item-data"><%= @book.author %></div>
+            </div><!--//col-->
+          </div><!--//row-->
+        </div>
 
-<p>
-  <strong>Author:</strong>
-  <%= @book.author %>
-</p>
+        <div class="item border-bottom py-3">
+          <div class="row justify-content-between align-items-center">
+            <div class="col-auto">
+              <div class="item-label"><strong>Número de páginas</strong></div>
+              <div class="item-data"><%= @book.page_count %></div>
+            </div><!--//col-->
+          </div><!--//row-->
+        </div>             
+        <div class="row align-items-end mt-2">
+          <div class="btn-group col-md-12">
+            <%= link_to 'Editar', edit_book_path(@book), class: "btn app-btn-primary" %>
+            <%= link_to 'Cancelar', books_path, class: "btn app-btn-secondary" %>
+          </div>
+        </div>
+      </div><!--//app-card-body-->						    
+    </div><!--//app-card-->
+  </div>
+</div>
 
-<%= link_to 'Edit', edit_book_path(@book) %> |
-<%= link_to 'Back', books_path %>

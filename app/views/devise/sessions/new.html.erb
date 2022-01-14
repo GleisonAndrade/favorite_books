@@ -1,26 +1,54 @@
-<h2>Log in</h2>
-
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+<div class="app-auth-body mx-auto">	
+  <div class="app-auth-branding mb-4">
+    <a class="app-logo" href="<%= root_path %>">
+      <%= image_pack_tag "media/images/read-book-white.svg", class: "logo-icon me-2" %>
+    </a>
   </div>
+  
+  <h2 class="auth-heading text-center mb-5">Entrar no Favorite Books</h2>
 
-  <div class="field">
-    <%= f.label :password %><br />
-    <%= f.password_field :password, autocomplete: "current-password" %>
+    <div class="auth-form-container text-start">    
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name), class: "auth-form login-form") do |f| %>
+
+        <div class="email mb-3">
+          <%= f.label :email, class: "sr-only" %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control signin-email", placeholder: true, required: true %>
+        </div><!--//form-group-->
+
+        <div class="password mb-3">
+          <%= f.label :password, class: "sr-only" %>
+          <%= f.password_field :password, autocomplete: "current-password", class: "form-control signin-password", placeholder: true, required: true %>
+        
+          <div class="extra mt-3 row justify-content-between">
+            <div class="col-6">
+              <% if devise_mapping.rememberable? %>
+                <div class="form-check">
+                  <%= f.check_box :remember_me, class: "form-check-input" %>
+                  <%= f.label :remember_me, class: "form-check-label" %>
+                </div>
+              <% end %>
+            </div><!--//col-6-->
+            <div class="col-6">
+              <div class="forgot-password text-end">
+                <%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
+                  <%= link_to "Esqueceu sua senha?", new_password_path(resource_name) %><br />
+                <% end %>
+              </div>
+            </div><!--//col-6-->
+          </div>
+        </div>
+
+        <div class="text-center">
+          <button type="submit" class="btn app-btn-primary w-100 theme-btn mx-auto">Entrar</button>
+        </div>
+      <% end %>
+
+      <%- if devise_mapping.registerable? && controller_name != 'registrations' %>
+        <div class="auth-option text-center pt-5">
+          É novo por aqui? <%= link_to "Cadastrar", new_registration_path(resource_name), class: "text-link" %><br />
+        </div>
+      <% end %>
+
+    </div><!--//auth-form-container-->	
   </div>
-
-  <% if devise_mapping.rememberable? %>
-    <div class="field">
-      <%= f.check_box :remember_me %>
-      <%= f.label :remember_me %>
-    </div>
-  <% end %>
-
-  <div class="actions">
-    <%= f.submit "Log in" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</div>

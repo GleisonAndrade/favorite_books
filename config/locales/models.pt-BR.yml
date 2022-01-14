@@ -1,0 +1,11 @@
+pt-BR:
+  activerecord:
+    attributes:
+      user:
+        name: Nome
+      book:
+        title: Título
+        description: Descrição
+        image_url: URL da capa
+        page_count: Quantiade de páginas
+        author: Autor
