@@ -19,6 +19,7 @@ window.bootstrap = require('bootstrap');
 import "@fortawesome/fontawesome-free/js/all"
 require.context('../images', true)
 import "./stylesheets/application"
+import "./stylesheets/favorite_books"
 import "./js/app"
 
 Rails.start()
