@@ -15,10 +15,10 @@ FactoryBot.define do
     password_confirmation { "12345678" }
   end
 
-  factory :read, class: User do
+  factory :reader, class: User do
     name { Faker::Name.name }
     email { Faker::Internet.email }
-    profile { :read }
+    profile { :reader }
     password { "12345678" }
     password_confirmation { "12345678" }
   end
