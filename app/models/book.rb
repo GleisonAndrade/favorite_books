@@ -19,11 +19,11 @@ class Book < ApplicationRecord
   end
 
   def favorite?(user)
-    user.profile.reader? && self.users_books.where(user: user).where.not(status: :excluded).where(favorite: true).any?
+    user.profile.reader? && self.users_books.with_user(user).actives.favorites.any?
   end
 
   def follow?(user)
-    user.profile.reader? && self.users_books.where(user: user).where.not(status: :excluded).any?
+    user.profile.reader? && self.users_books.with_user(user).actives.any?
   end
 
   def self.favorite_books(user)
@@ -62,7 +62,7 @@ class Book < ApplicationRecord
     
     def remove_favorite(user)
       begin
-        user_book = self.users_books.where(user: user).where.not(status: :excluded).where(favorite: true).first
+        user_book = self.users_books.with_user(user).actives.favorites.first
         user_book.favorite = false
         user_book.status = :excluded
         user_book.save!
