@@ -17,10 +17,10 @@ module ControllerMacros
       end
     end
 
-    def login_read
+    def login_reader
       before(:each) do
         @request.env['devise.mapping'] = Devise.mappings[:user]
-        user = FactoryBot.create(:read)
+        user = FactoryBot.create(:reader)
         # user.confirm!
         sign_in user
       end
