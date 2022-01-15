@@ -3,7 +3,13 @@ class BooksController < ApplicationController
 
   # GET /books or /books.json
   def index
-    @books = Book.all.order(created_at: :desc)
+    params[:filter] ||= 'all'
+
+    if params[:filter] == 'all'
+      @books = Book.all.order(created_at: :desc)
+    else
+      @books = Book.favorite_books(current_user).order(created_at: :desc)
+    end
   end
 
   # GET /books/1 or /books/1.json

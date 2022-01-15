@@ -26,6 +26,10 @@ class Book < ApplicationRecord
     user.profile.reader? && self.users_books.where(user: user).where.not(status: :excluded).any?
   end
 
+  def self.favorite_books(user)
+    Book.joins(:users_books).where(users_books: { favorite: true, user_id: user.id }).where.not(users_books: { status: :excluded })
+  end
+
   private
 
     # will only be used when the follow books flow is created
