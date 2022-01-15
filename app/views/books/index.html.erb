@@ -3,43 +3,13 @@
     <h1 class="app-page-title mb-0">Livros</h1>
   </div>
   <div class="col-auto">
-    <div class="page-utilities">
-      <div class="row g-2 justify-content-start justify-content-md-end align-items-center">
-        <div class="col-auto">
-          <form class="table-search-form row gx-1 align-items-center">
-            <div class="col-auto">
-              <input type="text" id="search-orders" name="searchorders" class="form-control search-orders" placeholder="Texto contido no título e descrição">
-            </div>
-            <div class="col-auto">
-              <button type="submit" class="btn app-btn-secondary">Buscar</button>
-            </div>
-          </form>                
-        </div><!--//col-->
-
-        <div class="col-auto">          
-          <select class="form-select w-auto">
-            <option value="option-1">Recentemente adicionado</option>
-            <option value="option-2">Mais antigo</option>
-            <option value="option-3">Título A-Z</option>
-            <option value="option-4">Título Z-A</option>            
-          </select>
-        </div>
-
-        <div class="col-auto">
-          <%= link_to new_book_path, class: "btn app-btn-primary" do -%>						    
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
-              <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
-            </svg>
-            Novo Livro
-          </a>
-          <% end %>
-        </div>
-      </div><!--//row-->
-    </div><!--//table-utilities-->
+    <%= render 'books/filters' %>
   </div><!--//col-auto-->
 </div>
 
 <!-- Por tab bar com favoritos no futuro -->
+
+<%= render 'books/nav_bar' %>
 
 <div class="tab-content" id="orders-table-tab-content">
   <div class="tab-pane fade show active" id="orders-all" role="tabpanel" aria-labelledby="orders-all-tab">
@@ -59,14 +29,37 @@
             <tbody>
               <% @books.each do |book| %>
                 <tr>
-                  <td class="cell"><span class="truncate"><%= book.title %></span></td>
-                  <td class="cell"><span class="truncate"><%= book.author %></span></td>
+                  <td class="cell"><%= link_to book.title, book %></td>
+                  <td class="cell"><%= book.author %></td>
                   <td class="cell"><%= book.page_count %></td>
                   <td class="cell"><span><%= I18n.l book.created_at, format: "%d de %B" %></span><span class="note"><%= I18n.l book.created_at, format: "%H:%M" %></span></td>
                   <td class="cell">
-                    <%= link_to 'Show', book, class: "btn-sm app-btn-secondary" %>
-                    <%= link_to 'Edit', edit_book_path(book), class: "btn-sm app-btn-secondary" %>
-                    <%= link_to 'Destroy', book, class: "btn-sm btn-danger", method: :delete, data: { confirm: 'Você deseja continuar?' } %>
+                    <% if book.favorite?(current_user) %>
+                      <%= link_to favorite_book_path(book), method: :patch, class: "btn btn-outline-warning" do -%>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
+                          <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                        </svg>
+                      <% end %>
+                    <% else %>
+                      <%= link_to favorite_book_path(book), method: :patch, class: "btn btn-outline-warning" do -%>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
+                          <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/>
+                        </svg>
+                      <% end %>
+                    <% end %>
+
+                    <%= link_to edit_book_path(book), class: "btn btn-outline-secondary" do -%>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+                      </svg>
+                    <% end %>
+
+                    <%= link_to book, class: "btn btn-outline-danger", method: :delete, data: { confirm: 'Você deseja continuar?' } do -%>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                        <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                      </svg>
+                    <% end %>
                   </td>
                 </tr>
               <% end %>

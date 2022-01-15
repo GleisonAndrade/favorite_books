@@ -1,9 +1,15 @@
 class BooksController < ApplicationController
-  before_action :set_book, only: %i[ show edit update destroy ]
+  before_action :set_book, only: %i[ show edit update destroy favorite]
 
   # GET /books or /books.json
   def index
-    @books = Book.all.order(created_at: :desc)
+    params[:filter] ||= 'all'
+
+    if params[:filter] == 'all'
+      @books = Book.all.order(created_at: :desc)
+    else
+      @books = Book.favorite_books(current_user).order(created_at: :desc)
+    end
   end
 
   # GET /books/1 or /books/1.json
@@ -54,6 +60,21 @@ class BooksController < ApplicationController
     respond_to do |format|
       format.html { redirect_to books_url, notice: "Book was successfully destroyed." }
       format.json { head :no_content }
+    end
+  end
+
+  def favorite
+    favorite = @book.favorite?(current_user)
+    notice = "O Livro #{@book.title} foi #{favorite ? 'removido dos favoritos' : 'adicionado aos favoritos'} com sucesso."
+
+    respond_to do |format|
+      if @book.favorite(current_user)
+        format.html { redirect_to books_url, notice: notice }
+        format.json { render :show, status: :ok, location: @book }
+      else
+        format.html { render :index, status: :unprocessable_entity }
+        format.json { render json: @book.errors, status: :unprocessable_entity }
+      end
     end
   end
 

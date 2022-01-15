@@ -11,12 +11,36 @@ RSpec.describe WelcomeController, type: :controller do
       end
     end
 
-    context "with user logged in read profile" do
-      login_read
+    context "with user logged in reader profile" do
+      login_reader
 
-      it "should return 200" do
+      it "should return 302 to /books" do
         get :index
-        expect(response).to have_http_status(:success)
+        expect(response).to have_http_status(302)
+        expect(response).to redirect_to(books_path)
+        # expect(response).to have_http_status(:success)
+      end
+    end
+
+    context "with user logged in librarian profile" do
+      login_librarian
+
+      it "should return 302 to /books" do
+        get :index
+        expect(response).to have_http_status(302)
+        expect(response).to redirect_to(books_path)
+        # expect(response).to have_http_status(:success)
+      end
+    end
+
+    context "with user logged in admin profile" do
+      login_admin
+
+      it "should return 302 to /books" do
+        get :index
+        expect(response).to have_http_status(302)
+        expect(response).to redirect_to(books_path)
+        # expect(response).to have_http_status(:success)
       end
     end
   end

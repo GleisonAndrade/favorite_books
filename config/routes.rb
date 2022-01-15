@@ -3,5 +3,8 @@ Rails.application.routes.draw do
   root to: "welcome#index"
   
   devise_for :users
-  resources :books
+
+  resources :books do
+    patch :favorite, on: :member
+  end
 end  
