@@ -1,6 +1,9 @@
 class User < ApplicationRecord
   extend Enumerize
 
+  has_many :users_books, dependent: :destroy
+  has_many :books, through: :users_books  
+
   enumerize :profile, in: [:admin, :librarian, :read], scope: true, predicates: true, default: :read
 
   devise :database_authenticatable, :registerable,
