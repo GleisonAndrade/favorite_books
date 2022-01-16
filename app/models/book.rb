@@ -1,14 +1,20 @@
 class Book < ApplicationRecord
+  extend Enumerize
   paginates_per 6
 
   has_many :users_books, dependent: :destroy
   has_many :users, through: :users_books
-
   accepts_nested_attributes_for :users_books
+
+  enumerize :status, in: [:active, :inactive], scope: true, predicates: true, default: :active
+
 
   validates :title, :description, :image_url, :page_count, :author, presence: true
   validates :title, :description, :author, length: { minimum: 3 }
   validates :page_count, numericality: { only_integer: true, greater_than: 0 }
+
+  scope :actives, -> { where(status: :active) }
+  scope :inactives, -> { where(status: :inactive) }
 
   def favorite(user)
     if check_reader?(user)
