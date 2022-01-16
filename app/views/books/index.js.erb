@@ -1,1 +1,12 @@
-$('.items-container').html("<%= j (render partial: 'book') %>")
+function replaceBooks (innerHTML) {
+  const books = document.getElementById('books-tbody');
+  books.innerHTML = innerHTML;
+}
+
+function replaceKaminari (innerHTML) {
+  const kaminari = document.getElementById('kaminari-infos');
+  kaminari.innerHTML = innerHTML;
+}
+
+replaceBooks("<%= j render @books %>");
+replaceKaminari("<%= j render 'layouts/shared/kaminari_infos', list: @books, remote: true %>")
