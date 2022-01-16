@@ -1,5 +1,5 @@
 
-admin = User.where(:name => 'Admin', :email => 'admin@favorite_books.com', :profile => 'admin').first_or_create(
+admin = User.where(:name => 'Admin', :email => 'admin@favoritebooks.com', :profile => 'admin').first_or_create(
   :password => '12345678'
 )
 

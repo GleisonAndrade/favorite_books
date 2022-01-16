@@ -4,7 +4,7 @@ class User < ApplicationRecord
   has_many :users_books, dependent: :destroy
   has_many :books, through: :users_books  
 
-  enumerize :profile, in: [:admin, :librarian, :reader], scope: true, predicates: true, default: :reader
+  enumerize :profile, in: [:admin, :librarian, :reader], scope: true, predicates: true, default: :reader, i18n_scope: ["activerecord.enumerize.user.profile"]
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable

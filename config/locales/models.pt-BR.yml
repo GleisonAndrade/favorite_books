@@ -9,3 +9,19 @@ pt-BR:
         image_url: URL da capa
         page_count: Quantiade de páginas
         author: Autor
+    enumerize:
+      user:
+        profile:
+          reader: Leitor
+          librarian: Bibliotecário
+          admin: Administrador
+      book:
+        status:
+          active: Ativo 
+          inactive: Inativo
+      user_book:
+        status:
+          added: Adicionado
+          read: Lendo
+          finished: Finalizado
+          excluded: Excluído

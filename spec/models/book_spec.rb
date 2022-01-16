@@ -112,4 +112,113 @@ RSpec.describe Book, type: :model do
       expect(book.follow?(@user)).to eq(false)
     end
   end
+
+  context 'user with admin profile' do
+    before do
+      @user = create(:admin)
+    end
+    
+    it "set as favorite" do
+      expect(@user.profile.admin?).to eq(true)
+
+      book = create(:book)
+      book.favorite(@user)
+
+      expect(book.errors).to_not be_empty
+      expect(book.favorite?(@user)).to eq(false)
+      expect(book.follow?(@user)).to eq(false)
+    end
+
+    it "remove book from favorites" do
+      book = create(:book)
+      book.favorite(@user)
+
+      expect(@user.profile.admin?).to eq(true)
+
+      book.favorite(@user)
+
+      expect(book.errors).to_not be_empty
+      expect(book.favorite?(@user)).to eq(false)
+      expect(book.follow?(@user)).to eq(false)
+    end
+  end
+
+  context 'user with reader profile' do
+    before do
+      @user = create(:reader)
+      @book = create(:book)
+    end
+    
+    it "remove active book" do
+      expect(@user.profile.reader?).to eq(true)
+
+      @book.remove(@user)
+
+      expect(@book.status).to eq(:active)
+      expect(@book.errors).to_not be_empty
+    end
+
+    it "remove inactive book" do
+      expect(@user.profile.reader?).to eq(true)
+
+      @book.status = :inactive
+      @book.remove(@user)
+
+      expect(@book.status).to eq(:inactive)
+      expect(@book.errors).to_not be_empty
+    end
+  end
+
+  context 'user with librarian profile' do
+    before do
+      @user = create(:librarian)
+      @book = create(:book)
+    end
+    
+    it "remove active book" do
+      expect(@user.profile.librarian?).to eq(true)
+
+      @book.remove(@user)
+
+      expect(@book.status).to eq(:inactive)
+      expect(@book.errors).to be_empty
+    end
+
+    it "remove inactive book" do
+      expect(@user.profile.librarian?).to eq(true)
+
+      @book.status = :inactive
+      @book.remove(@user)
+
+      expect(@book.status).to eq(:inactive)
+      expect(@book.errors).to_not be_empty
+    end
+  end
+
+  context 'user with admin profile' do
+    before do
+      @user = create(:admin)
+      @book = create(:book)
+    end
+    
+    it "remove active book" do
+      expect(@user.profile.admin?).to eq(true)
+
+      @book.remove(@user)
+
+      expect(@book.status).to eq(:inactive)
+      expect(@book.errors).to be_empty
+    end
+
+    it "remove inactive book" do
+      expect(@user.profile.admin?).to eq(true)
+
+      @book.status = :inactive
+      @book.remove(@user)
+
+      expect(@book.status).to eq(:inactive)
+      expect(@book.errors).to_not be_empty
+    end
+  end
+
 end

@@ -4,7 +4,7 @@ class UserBook < ApplicationRecord
   belongs_to :user
   belongs_to :book
 
-  enumerize :status, in: [:added, :read, :finished, :excluded], scope: true, predicates: true, default: :added
+  enumerize :status, in: [:added, :read, :finished, :excluded], scope: true, predicates: true, default: :added, i18n_scope: ["activerecord.enumerize.user_book.status"]
 
   validates :user_id, :book_id, presence: true
   validates :pages_read, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
