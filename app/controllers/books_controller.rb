@@ -1,14 +1,16 @@
 class BooksController < ApplicationController
   before_action :set_book, only: %i[ show edit update destroy favorite]
+  before_action :authorize_book, only: %i[index new create]
+  before_action :authorize_book_with_record, only: %i[show edit update destroy favorite]
 
   # GET /books or /books.json
   def index
     params[:filter] ||= 'all'
 
     if params[:filter] == 'all'
-      @books = Book.all.page(params[:page]).order(created_at: :desc)
+      @books = policy_scope(Book).page(params[:page]).order(created_at: :desc)
     else
-      @books = Book.favorite_books(current_user).page(params[:page]).order(created_at: :desc)
+      @books = policy_scope(Book.favorite_books(current_user)).page(params[:page]).order(created_at: :desc)
     end
   end
 
@@ -31,7 +33,7 @@ class BooksController < ApplicationController
 
     respond_to do |format|
       if @book.save
-        format.html { redirect_to book_url(@book), notice: "Book was successfully created." }
+        format.html { redirect_to book_url(@book), notice: "O livro #{@book.title} foi cadastrado com sucesso." }
         format.json { render :show, status: :created, location: @book }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -44,7 +46,7 @@ class BooksController < ApplicationController
   def update
     respond_to do |format|
       if @book.update(book_params)
-        format.html { redirect_to book_url(@book), notice: "Book was successfully updated." }
+        format.html { redirect_to book_url(@book), notice: "O livro #{@book.title} foi atualizado com sucesso." }
         format.json { render :show, status: :ok, location: @book }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -55,11 +57,14 @@ class BooksController < ApplicationController
 
   # DELETE /books/1 or /books/1.json
   def destroy
-    @book.destroy
-
     respond_to do |format|
-      format.html { redirect_to books_url, notice: "Book was successfully destroyed." }
-      format.json { head :no_content }
+      if @book.remove(current_user)
+        format.html { redirect_to books_url, notice: "O livro #{@book.title} foi excluído com sucesso." }
+        format.json { head :no_content }
+      else
+        format.html { render :index, status: :unprocessable_entity }
+        format.json { render json: @book.errors, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -87,5 +92,13 @@ class BooksController < ApplicationController
     # Only allow a list of trusted parameters through.
     def book_params
       params.require(:book).permit(:title, :description, :image_url, :page_count, :author)
+    end
+
+    def authorize_book
+      authorize Book
+    end
+
+    def authorize_book_with_record
+      authorize @book
     end
 end
