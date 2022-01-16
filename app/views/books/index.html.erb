@@ -7,7 +7,10 @@
 <%= render 'books/index_option' %>
 <%= render 'books/filters' %>
 <%= render 'books/order' %>
-<%= render 'books/nav_bar' %>
+
+<div id="nav-bar-books">
+  <%= render 'books/nav_bar' %>
+</div>
 
 <div class="tab-content" id="orders-table-tab-content">
   <div class="tab-pane fade show active" id="orders-all" role="tabpanel" aria-labelledby="orders-all-tab">
@@ -29,11 +32,15 @@
             </thead>
             <tbody id="books-tbody">
               <%= render @books %>
+            </tbody>
           </table>
         </div><!--//table-responsive-->
       </div><!--//app-card-body-->		
-    </div><!--//app-card-->    
+    </div><!--//app-card-->
+
+    <div id="kaminari-infos">
+      <%= render 'layouts/shared/kaminari_infos', list: @books, remote: true %>
+    </div>   
     
-    <%= render 'layouts/shared/kaminari_infos', list: @books %>
   </div><!--//tab-pane-->
 </div>

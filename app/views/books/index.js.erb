@@ -8,5 +8,14 @@ function replaceKaminari (innerHTML) {
   kaminari.innerHTML = innerHTML;
 }
 
+function replaceNavBar (innerHTML) {
+  const navbar = document.getElementById('nav-bar-books');
+  navbar.innerHTML = innerHTML;
+}
+
 replaceBooks("<%= j render @books %>");
 replaceKaminari("<%= j render 'layouts/shared/kaminari_infos', list: @books, remote: true %>")
+replaceNavBar("<%= j render 'books/nav_bar' %>")
+
+console.log(">>>", getParameters());
+console.log("filters: ", "<%= request.original_url %>")
