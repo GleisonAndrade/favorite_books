@@ -83,4 +83,47 @@ $(window).on('load', function(){
 			}
 		});
 	}
+
+	/* Functions */
+
+	window.getParameters = function() {
+		var searchString = window.location.search.substring(1),
+		params = searchString.split("&"),
+		fields_hash = {};
+
+		if (searchString == "") return {};
+		for (var i = 0; i < params.length; i++) {
+			var val = params[i].split("=");
+			fields_hash[unescape(val[0])] = unescape(val[1]);
+		}
+
+		return fields_hash;
+	}
+
+	window.getInputs = function(form_id) {
+		var fields = $(form_id).find( ":input" ).serializeArray();
+		var fields_hash = {};
+
+		for (var index in fields) {
+			fields_hash[unescape(fields[index].name)] = unescape(fields[index].value);
+		}
+
+		return fields_hash
+	}
+
+	window.update_form_fields = function(form_id, inputHash, params_ignore_list) {
+		console.log(params_ignore_list)
+
+		params_ignore_list.forEach(e => delete inputHash[e]);
+
+		console.log(inputHash)
+
+		for (var key in inputHash) {
+			$("<input />").attr("type", "hidden")
+					.attr("name", key)
+					.attr("value", inputHash[key])
+					.appendTo(form_id);
+		}
+	}
+
 });
