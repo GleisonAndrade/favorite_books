@@ -1,4 +1,6 @@
 class Book < ApplicationRecord
+  paginates_per 6
+
   has_many :users_books, dependent: :destroy
   has_many :users, through: :users_books
 

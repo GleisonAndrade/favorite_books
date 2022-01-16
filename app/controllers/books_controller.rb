@@ -6,9 +6,9 @@ class BooksController < ApplicationController
     params[:filter] ||= 'all'
 
     if params[:filter] == 'all'
-      @books = Book.all.order(created_at: :desc)
+      @books = Book.all.page(params[:page]).order(created_at: :desc)
     else
-      @books = Book.favorite_books(current_user).order(created_at: :desc)
+      @books = Book.favorite_books(current_user).page(params[:page]).order(created_at: :desc)
     end
   end
 

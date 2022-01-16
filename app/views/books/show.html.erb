@@ -30,7 +30,7 @@
         <div class="item border-bottom py-3">
           <div class="row justify-content-between align-items-center">
             <div class="col-auto">
-              <div class="item-label"><strong>Author</strong></div>
+              <div class="item-label"><strong>Autor</strong></div>
               <div class="item-data"><%= @book.author %></div>
             </div><!--//col-->
           </div><!--//row-->
@@ -43,7 +43,27 @@
               <div class="item-data"><%= @book.page_count %></div>
             </div><!--//col-->
           </div><!--//row-->
-        </div>             
+        </div>
+
+        <div class="item border-bottom py-3">
+          <div class="row justify-content-between align-items-center">
+            <div class="col-auto">
+              <div class="item-label"><strong>Adicionado em</strong></div>
+              <div class="item-data"><%= I18n.l @book.created_at, format: "%d de %B às %H:%M" %></div>
+            </div><!--//col-->
+          </div><!--//row-->
+        </div>
+
+        <div class="item border-bottom py-3">
+          <div class="row justify-content-between align-items-center">
+            <div class="col-auto">
+              <div class="item-label"><strong>Atualizado em</strong></div>
+              <div class="item-data"><%= I18n.l @book.updated_at, format: "%d de %B às %H:%M" %></div>
+            </div><!--//col-->
+          </div><!--//row-->
+        </div>
+
+
         <div class="row align-items-end mt-2">
           <div class="btn-group col-md-12">
             <%= link_to 'Editar', edit_book_path(@book), class: "btn app-btn-primary" %>
