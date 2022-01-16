@@ -17,7 +17,7 @@ class Book < ApplicationRecord
   scope :inactives, -> { where(status: :inactive) }
 
   def favorite(user)
-    if check_reader?(user)
+    if is_reader?(user)
       if favorite?(user)
         remove_favorite(user)
       else
@@ -34,6 +34,15 @@ class Book < ApplicationRecord
     user.profile.reader? && self.users_books.with_user(user).actives.any?
   end
 
+  def remove(user)
+    if is_not_reader?(user) && self.status.active?
+      self.status = :inactive
+      self.save!
+    else
+      self.errors.add(:base, "O livro já foi removido")
+    end
+  end
+
   def self.favorite_books(user)
     Book.joins(:users_books).where(users_books: { favorite: true, user_id: user.id }).where.not(users_books: { status: :excluded })
   end
@@ -42,7 +51,7 @@ class Book < ApplicationRecord
 
     # will only be used when the follow books flow is created
     def follow(user)
-      if check_reader?(user)
+      if is_reader?(user)
         if follow?(user)
           self.errors.add(:base, "Você já está seguindo este livro")
         else
@@ -51,9 +60,18 @@ class Book < ApplicationRecord
       end
     end
 
-    def check_reader?(user)
+    def is_reader?(user)
       unless user.profile.reader?
         self.errors.add(:base, "Apenas usuários leitores podem realizar essa ação")
+        return false
+      end
+
+      true
+    end
+
+    def is_not_reader?(user)
+      if user.profile.reader?
+        self.errors.add(:base, "Apenas usuários administradores e bibliotecários podem realizar essa ação")
         return false
       end
 
