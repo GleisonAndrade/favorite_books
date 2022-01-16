@@ -6,7 +6,7 @@ class Book < ApplicationRecord
   has_many :users, through: :users_books
   accepts_nested_attributes_for :users_books
 
-  enumerize :status, in: [:active, :inactive], scope: true, predicates: true, default: :active
+  enumerize :status, in: [:active, :inactive], scope: true, predicates: true, default: :active, i18n_scope: ["activerecord.enumerize.book.status"]
 
 
   validates :title, :description, :image_url, :page_count, :author, presence: true
