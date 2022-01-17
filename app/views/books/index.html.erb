@@ -1,0 +1,54 @@
+<div class="row g-3 mb-4 align-items-center justify-content-between">
+  <div class="col-auto">
+    <h1 class="app-page-title mb-0">Livros</h1>
+  </div><!--//col-auto-->
+</div>
+
+<%= render 'books/index_option' %>
+
+<div id="filters-books">
+  <%= render 'books/filters' %>
+</div>
+
+<div id="order-books">
+  <%= render 'books/order' %>
+</div>
+
+<% if current_user.reader? %>
+  <div id="nav-bar-books">
+    <%= render 'books/nav_bar' %>
+  </div>
+<% end %>
+
+<div class="tab-content" id="orders-table-tab-content">
+  <div class="tab-pane fade show active" id="orders-all" role="tabpanel" aria-labelledby="orders-all-tab">
+    <div class="app-card app-card-orders-table shadow-sm mb-5">
+      <div class="app-card-body">
+        <div class="table-responsive">
+          <table class="table app-table-hover mb-0 text-left">
+            <thead>
+              <tr>
+                <th class="cell">Título</th>
+                <th class="cell">Autor</th>
+                <th class="cell">Nº Páginas</th>
+                <th class="cell">Adicionado em</th>
+                <% if current_user.admin? %>
+                  <th class="cell">Status</th>
+                <% end %>
+                <th class="cell"></th>
+              </tr>
+            </thead>
+            <tbody id="books-tbody">
+              <%= render @books %>
+            </tbody>
+          </table>
+        </div><!--//table-responsive-->
+      </div><!--//app-card-body-->		
+    </div><!--//app-card-->
+
+    <div id="kaminari-infos">
+      <%= render 'layouts/shared/kaminari_infos', list: @books, remote: true %>
+    </div>   
+    
+  </div><!--//tab-pane-->
+</div>

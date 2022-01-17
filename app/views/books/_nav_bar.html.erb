@@ -1,0 +1,4 @@
+<nav id="orders-table-tab" class="orders-table-tab app-nav-tabs nav shadow-sm flex-column flex-sm-row mb-4">
+  <%= link_to "Todos", books_path(request.query_parameters.merge(filter: 'all')), class: "flex-sm-fill text-sm-center nav-link #{'active' if params[:filter] == 'all'}", role: "tab", 'aria-controls': "books-all", remote: true %>
+  <%= link_to "Favoritos", books_path(request.query_parameters.merge(filter: 'favorites')), class: "flex-sm-fill text-sm-center nav-link #{'active' if params[:filter] == 'favorites'}", role: "tab", 'aria-controls': "books-favorites", remote: true %>
+</nav>

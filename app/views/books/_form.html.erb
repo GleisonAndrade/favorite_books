@@ -1,0 +1,16 @@
+<%= simple_form_for book do |f| %>
+  <%= f.input :title, required: true  %>
+  <%= f.input :description, as: :text, required: true, input_html: { rows: 10 } %>
+  <%= f.input :image_url, required: true %>
+  <%= f.input :page_count, as: :integer, required: true %>
+  <%= f.input :author, required: true %>
+
+  <div class="row align-items-end mt-2">
+    <div class="btn-group col-md-12">
+      <%= link_to 'Excluír', book, class: "btn btn-danger", method: :delete, data: { confirm: 'Você deseja continuar?'} if policy(book).destroy? %>
+      <%= f.button :submit, class: "btn app-btn-primary" %>
+      <%= link_to 'Cancelar', books_path, class: "btn app-btn-secondary" %>
+    </div>
+  </div>
+</div>
+<% end %>

@@ -11,7 +11,20 @@
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
-  <body>
-    <%= yield %>
+  <body class="app">
+    <%= render partial: "layouts/shared/header" %>
+
+    <div class="app-wrapper">
+      <div class="app-content pt-3 p-md-3 p-lg-4">
+          <div class="container-xl">
+            <%= render "layouts/shared/alerts" %>			    
+            <%= content_for?(:content) ? yield(:content) : yield %>
+          </div><!--//container-fluid-->
+      </div><!--//app-content-->  
+
+      <%= render partial: "layouts/shared/footer" %>  
+    </div><!--//app-wrapper-->  
+
+    <%= yield :javascript %>
   </body>
 </html>

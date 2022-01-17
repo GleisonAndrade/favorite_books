@@ -1,0 +1,29 @@
+<div class="row g-3 mb-1 align-items-end">
+  <div class="page-utilities">
+    <div class="row g-2">
+      <%= form_tag(books_path(request.query_parameters), :method => "GET", role: "form", class: "table-search-form row gx-1 align-items-center", id: "form-books-filter", remote: true) do %>   
+        <div class="col-md-6 mb-3">
+          <%= text_field_tag(:contains_text, params[:contains_text], placeholder: "Texto contido no título e descrição", class: "form-control") %>  
+        </div><!--//col-->
+
+        <div class="col-md-6  mb-3">
+          <%= text_field_tag(:with_author, params[:with_author], placeholder: "Nome do autor", class: "form-control") %>          
+        </div>
+
+        <!--div class="col-md-1  mb-3">
+          <button type="submit" class="btn app-btn-secondary text-rigth", id="filter-button" data-remote=true>Buscar</button>
+        </div -->
+
+      <% end %>
+    </div><!--//row-->
+  </div><!--//table-utilities-->
+</div><!--//col-auto-->
+
+<%= content_for :javascript do %>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      // submit_form_ajax_input_text('form-books-filter', 'contains_text');
+      // submit_form_ajax_input_text('form-books-filter', 'with_author');
+    });
+  </script>
+<% end %>

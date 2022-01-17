@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>FavoriteBooks</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <!-- Warning !! ensure that "stylesheet_pack_tag" is used, line below -->
+    <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body class="app app-login p-0">
+    <div class="row g-0 app-auth-wrapper">
+      <%= render "layouts/shared/alerts" %>
+      <div class="auth-main-col text-center p-5"> <!-- col-12 col-md-7 col-lg-6 -->
+        <div class="d-flex flex-column align-content-end">
+          <!-- CONTEUDO PRINCIPAL -->
+          <%= content_for?(:content) ? yield(:content) : yield %>
+
+          <footer class="app-auth-footer">
+            <div class="container text-center py-3">
+                <!--/* This template is free as long as you keep the footer attribution link. If you'd like to use the template without the attribution link, you can buy the commercial license via our website: themes.3rdwavemedia.com Thank you for your support. :) */-->
+              <small class="copyright">Designed with <svg class="svg-inline--fa fa-heart fa-w-16" style="color: #fb866a;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="heart" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z"></path></svg><!-- <i class="fas fa-heart" style="color: #fb866a;"></i> Font Awesome fontawesome.com --> by <a class="app-link" href="http://themes.3rdwavemedia.com" target="_blank">Xiaoying Riley</a> for developers</small>
+              
+            </div>
+          </footer><!--//app-auth-footer-->	
+        </div><!--//flex-column-->   
+      </div><!--//auth-main-col-->  
+    </div><!--//row-->	
+
+    <%= yield :javascript %>
+    
+  </body>
+</html>

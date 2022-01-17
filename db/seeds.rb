@@ -1,7 +1,25 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
+
+admin = User.where(:name => 'Admin', :email => 'admin@favoritebooks.com', :profile => 'admin').first_or_create(
+  :password => '12345678'
+)
+
+admin = User.where(:name => 'Bibliotecario', :email => 'librarian@favoritebooks.com', :profile => 'librarian').first_or_create(
+  :password => '12345678'
+)
+
+require 'json'
+
+file = File.read('public/data/books.json')
+books_hash = JSON.parse(file)
+
+books_hash.each do |hash|
+  Book.where(
+    title: hash['title'], 
+    description: hash['shortDescription'], 
+    image_url: hash['thumbnailUrl'], 
+    page_count: hash['pageCount'], 
+    author: hash['authors']&.first
+  ).first_or_create
+end
+
+

@@ -1,0 +1,18 @@
+.fb-image-cover{
+  max-width: 50%;
+  max-height: 50%;
+}
+
+.page-link {
+  color: #15a362 !important;
+}
+
+.page-item.active .page-link {
+  background-color: #15a362 !important;
+  border-color: #15a362 !important;
+  color: #fff !important;
+}
+
+.btn-danger {
+  color: #fff;
+}
