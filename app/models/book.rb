@@ -1,6 +1,6 @@
 class Book < ApplicationRecord
   extend Enumerize
-  paginates_per 6
+  paginates_per 5
 
   has_many :users_books, dependent: :destroy
   has_many :users, through: :users_books
@@ -15,6 +15,19 @@ class Book < ApplicationRecord
 
   scope :actives, -> { where(status: :active) }
   scope :inactives, -> { where(status: :inactive) }
+  scope :contains_text, -> (text) { where("books.title ilike ? OR books.description ilike ?", "%" + text + "%",  "%" + text + "%") }
+  scope :with_author, -> (author) { where("books.author ilike ?", "%" + author + "%") }
+  scope :order_by, -> (criteria) do
+    if criteria == 'OrderByCreatedAtDesc'
+      order(created_at: :desc)
+    elsif criteria == 'OrderByCreatedAtAsc'
+      order(created_at: :asc)
+    elsif criteria == 'OrderByTitleAsc'
+      order(title: :asc)
+    elsif criteria == 'OrderByTitleDesc'
+      order(title: :desc)
+    end
+  end
 
   def favorite(user)
     if is_reader?(user)

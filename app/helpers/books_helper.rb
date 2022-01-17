@@ -6,4 +6,13 @@ module BooksHelper
       "<span class='badge bg-danger'>#{book.status_text}</span>".html_safe
     end
   end
+
+  def options_for_select_books_order_by
+    [
+      ["Recentemente adicionado", "OrderByCreatedAtDesc"],
+      ["Mais antigo","OrderByCreatedAtAsc"],
+      ["Título A-Z","OrderByTitleAsc"],
+      ["Título Z-A","OrderByTitleDesc"]
+    ]
+  end
 end

@@ -1,0 +1,18 @@
+<div class="row g-3 mb-1 align-items-end">
+  <div class="page-utilities">
+    <%= form_tag(books_path(request.query_parameters), :method => "GET", role: "form", class: "table-search-form row gx-1 align-items-center", id: "form-books-order", remote: true) do %>
+      <div class="col-auto">  
+        <%= select_tag(:order_by, options_for_select(options_for_select_books_order_by, params[:order_by]), include_blank: false, class: "form-select w-auto") %>        
+      </div>
+    <% end %>
+  </div><!--//table-utilities-->
+</div><!--//col-auto-->
+
+
+<%= content_for :javascript do %>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      // submit_form_ajax_input_select('form-books-order', 'order_by');
+    });
+  </script>
+<% end %>

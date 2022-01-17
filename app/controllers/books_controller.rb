@@ -3,14 +3,25 @@ class BooksController < ApplicationController
   before_action :authorize_book, only: %i[index new create]
   before_action :authorize_book_with_record, only: %i[show edit update destroy favorite]
 
+  has_scope :contains_text
+  has_scope :with_author
+  has_scope :order_by
+
+
   # GET /books or /books.json
   def index
     params[:filter] ||= 'all'
+    params[:order_by] ||= 'OrderByCreatedAtDesc'
 
     if params[:filter] == 'all'
-      @books = policy_scope(Book).page(params[:page]).order(created_at: :desc)
+      @books = apply_scopes(policy_scope(Book)).page(params[:page]).order(created_at: :desc)
     else
-      @books = policy_scope(Book.favorite_books(current_user)).page(params[:page]).order(created_at: :desc)
+      @books = apply_scopes(policy_scope(Book.favorite_books(current_user))).page(params[:page]).order(created_at: :desc)
+    end
+
+    respond_to do |format|
+      format.js { render layout: false }
+      format.html { render 'index' }
     end
   end
 
