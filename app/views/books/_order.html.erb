@@ -1,6 +1,6 @@
 <div class="row g-3 mb-1 align-items-end">
   <div class="page-utilities">
-    <%= form_tag(books_path, :method => "GET", role: "form", class: "table-search-form row gx-1 align-items-center", id: "form-books-order", remote: false) do %>
+    <%= form_tag(books_path(request.query_parameters), :method => "GET", role: "form", class: "table-search-form row gx-1 align-items-center", id: "form-books-order", remote: true) do %>
       <div class="col-auto">  
         <%= select_tag(:order_by, options_for_select(options_for_select_books_order_by, params[:order_by]), include_blank: false, class: "form-select w-auto") %>        
       </div>
@@ -8,18 +8,11 @@
   </div><!--//table-utilities-->
 </div><!--//col-auto-->
 
-<script type="text/javascript">
-  $(document).ready(function() {
 
-    $('#order_by').on('change', function() {
-      form_id = '#form-books-order'
-      inputs_hash = getInputs(form_id)
-      params_ignore_list = Object.keys(inputs_hash)
-      params = getParameters()
-
-      update_form_fields(form_id, params, params_ignore_list)
-      
-      $(form_id).submit();
+<%= content_for :javascript do %>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      // submit_form_ajax_input_select('form-books-order', 'order_by');
     });
-  });
-</script>
+  </script>
+<% end %>

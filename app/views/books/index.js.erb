@@ -10,12 +10,32 @@ function replaceKaminari (innerHTML) {
 
 function replaceNavBar (innerHTML) {
   const navbar = document.getElementById('nav-bar-books');
-  navbar.innerHTML = innerHTML;
+
+  if (navbar){
+    navbar.innerHTML = innerHTML;
+  }
+}
+
+function replaceOrderBooks (innerHTML) {
+  const order = document.getElementById('order-books');
+  order.innerHTML = innerHTML;
+}
+
+function replaceFiltersBooks (innerHTML) {
+  const filters = document.getElementById('filters-books');
+  filters.innerHTML = innerHTML;
 }
 
 replaceBooks("<%= j render @books %>");
 replaceKaminari("<%= j render 'layouts/shared/kaminari_infos', list: @books, remote: true %>")
 replaceNavBar("<%= j render 'books/nav_bar' %>")
+replaceOrderBooks("<%= j render 'books/order' %>")
+<%# replaceFiltersBooks("<%= j render 'books/filters' %>") %>
 
-console.log(">>>", getParameters());
-console.log("filters: ", "<%= request.original_url %>")
+window.history.pushState('Livros', "Página <%= params['page']%>", "<%= j request.original_url %>".replaceAll("amp;", ""));
+
+$(document).ready(function() {
+  submit_form_ajax_input_text('form-books-filter', 'contains_text');
+  submit_form_ajax_input_text('form-books-filter', 'with_author');
+  submit_form_ajax_input_select('form-books-order', 'order_by');
+});

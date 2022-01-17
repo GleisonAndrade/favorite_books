@@ -112,11 +112,8 @@ $(window).on('load', function(){
 	}
 
 	window.update_form_fields = function(form_id, inputHash, params_ignore_list) {
-		console.log(params_ignore_list)
 
 		params_ignore_list.forEach(e => delete inputHash[e]);
-
-		console.log(inputHash)
 
 		for (var key in inputHash) {
 			$("<input />").attr("type", "hidden")
@@ -125,5 +122,52 @@ $(window).on('load', function(){
 					.appendTo(form_id);
 		}
 	}
+
+	var timeout = null;	
+
+	window.submit_form_ajax_input_select = function(form_id, input_id) {
+		$('#' + input_id).on('change', function() {
+			var inputs_hash = getInputs('#' + form_id);
+			var params_ignore_list = Object.keys(inputs_hash);
+			params_ignore_list.push('page');
+			var params = getParameters();
+
+			update_form_fields('#' + form_id, params, params_ignore_list);
+
+			var elem = document.getElementById(form_id);
+			$.rails.fire(elem, 'submit');
+		});
+	}
+
+	function submit_search(form_id, input_id) {
+		var inputs_hash = getInputs('#' + form_id);
+		var params_ignore_list = Object.keys(inputs_hash);
+		params_ignore_list.push('page');
+		var params = getParameters();
+
+		update_form_fields('#' + form_id, params, params_ignore_list);
+
+		var elem = document.getElementById(form_id);
+		$.rails.fire(elem, 'submit');
+	}
+
+	window.submit_form_ajax_input_text = function(form_id, input_id) {
+		$('#' + input_id).on('keydown', function() {
+			if (this.value.length > 3) {
+				if (timeout) {  
+					clearTimeout(timeout);
+				}
+				timeout = setTimeout(function() {
+					submit_search(form_id, input_id);
+				}, 500);
+			}
+		});		
+	}
+
+	// temporary
+
+	submit_form_ajax_input_select('form-books-order', 'order_by');
+	submit_form_ajax_input_text('form-books-filter', 'contains_text');
+	submit_form_ajax_input_text('form-books-filter', 'with_author');
 
 });

@@ -5,12 +5,20 @@
 </div>
 
 <%= render 'books/index_option' %>
-<%= render 'books/filters' %>
-<%= render 'books/order' %>
 
-<div id="nav-bar-books">
-  <%= render 'books/nav_bar' %>
+<div id="filters-books">
+  <%= render 'books/filters' %>
 </div>
+
+<div id="order-books">
+  <%= render 'books/order' %>
+</div>
+
+<% if current_user.reader? %>
+  <div id="nav-bar-books">
+    <%= render 'books/nav_bar' %>
+  </div>
+<% end %>
 
 <div class="tab-content" id="orders-table-tab-content">
   <div class="tab-pane fade show active" id="orders-all" role="tabpanel" aria-labelledby="orders-all-tab">
