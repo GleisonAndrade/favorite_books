@@ -3,6 +3,10 @@ admin = User.where(:name => 'Admin', :email => 'admin@favoritebooks.com', :profi
   :password => '12345678'
 )
 
+admin = User.where(:name => 'Bibliotecario', :email => 'librarian@favoritebooks.com', :profile => 'librarian').first_or_create(
+  :password => '12345678'
+)
+
 require 'json'
 
 file = File.read('public/data/books.json')
