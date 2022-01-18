@@ -1,36 +1,16 @@
-function replaceBooks (innerHTML) {
-  const books = document.getElementById('books-tbody');
-  books.innerHTML = innerHTML;
-}
+function replaceHtmlContent (element_id, innerHTML) {
+  const elem = document.getElementById(element_id);
 
-function replaceKaminari (innerHTML) {
-  const kaminari = document.getElementById('kaminari-infos');
-  kaminari.innerHTML = innerHTML;
-}
-
-function replaceNavBar (innerHTML) {
-  const navbar = document.getElementById('nav-bar-books');
-
-  if (navbar){
-    navbar.innerHTML = innerHTML;
+  if (elem){
+    elem.innerHTML = innerHTML;
   }
 }
 
-function replaceOrderBooks (innerHTML) {
-  const order = document.getElementById('order-books');
-  order.innerHTML = innerHTML;
-}
-
-function replaceFiltersBooks (innerHTML) {
-  const filters = document.getElementById('filters-books');
-  filters.innerHTML = innerHTML;
-}
-
-replaceBooks("<%= j render @books %>");
-replaceKaminari("<%= j render 'layouts/shared/kaminari_infos', list: @books, remote: true %>")
-replaceNavBar("<%= j render 'books/nav_bar' %>")
-replaceOrderBooks("<%= j render 'books/order' %>")
-<%# replaceFiltersBooks("<%= j render 'books/filters' %>") %>
+replaceHtmlContent('books-tbody', "<%= j render @books %>");
+replaceHtmlContent('kaminari-infos', "<%= j render 'layouts/shared/kaminari_infos', list: @books, remote: true %>")
+replaceHtmlContent('nav-bar-books', "<%= j render 'books/nav_bar' %>")
+replaceHtmlContent('order-books', "<%= j render 'books/order' %>")
+<%# replaceHtmlContent('filters-books', "j render 'books/filters'") %>
 
 window.history.pushState('Livros', "Página <%= params['page']%>", "<%= j request.original_url %>".replaceAll("amp;", ""));
 
