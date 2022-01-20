@@ -28,16 +28,6 @@ RSpec.describe Book, type: :model do
       expect(book).to_not be_valid
     end
 
-    it "is not valid without a author" do
-      book.author = nil
-      expect(book).to_not be_valid
-    end
-
-    it "is not valid with a short author" do
-      book.author = 'ab'
-      expect(book).to_not be_valid
-    end
-
     it "is not valid without a image_url" do
       book.image_url = nil
       expect(book).to_not be_valid
@@ -48,8 +38,18 @@ RSpec.describe Book, type: :model do
       expect(book).to_not be_valid
     end
 
-    it "is not valid with zero page_count" do
+    it "is not valid page_count with zero value" do
       book.page_count = 0
+      expect(book).to_not be_valid
+    end
+
+    it "is not valid without a author" do
+      book.author = nil
+      expect(book).to_not be_valid
+    end
+
+    it "is not valid with a short author" do
+      book.author = 'ab'
       expect(book).to_not be_valid
     end
   end
