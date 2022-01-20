@@ -100,6 +100,7 @@ RSpec.describe "listing books", :type => :system, js: true do
     expect(page).to have_content(book.author)
     expect(page).to have_content(book.page_count)
     expect(page).to have_content("#{I18n.l book.created_at, format: "%d de %B"}\n#{ I18n.l book.created_at, format: "%H:%M" }")
+    expect(page).to have_content(book.status_text)
 
     expect(page).to_not have_link('', href: "/books/#{book.id}/favorite")
     expect(page).to have_link('', href: "/books/#{book.id}/edit")

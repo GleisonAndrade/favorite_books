@@ -28,7 +28,7 @@ class BookPolicy < ApplicationPolicy
   end
 
   def update?
-    !record.new_record? && (user.profile.admin? || user.profile.librarian?)
+    !record.new_record? && record.active? && (user.profile.librarian? || user.profile.admin?)
   end
 
   def edit?
