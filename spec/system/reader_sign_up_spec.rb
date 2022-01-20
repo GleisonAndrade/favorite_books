@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Reader signs up", :type => :system do
+RSpec.describe "Reader signs up", :type => :system, js: true do
   let(:user) { build(:reader) }
 
   scenario 'with valid email, password, password_confirmation and name' do

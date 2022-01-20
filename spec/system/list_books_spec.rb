@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "listing books", :type => :system do
+RSpec.describe "listing books", :type => :system, js: true do
   let(:reader_user) { create(:reader) }
   let(:librarian_user) { create(:librarian) }
   let(:admin_user) { create(:admin) }
