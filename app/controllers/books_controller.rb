@@ -14,9 +14,9 @@ class BooksController < ApplicationController
     params[:order_by] ||= 'OrderByCreatedAtDesc'
 
     if params[:filter] == 'all'
-      @books = apply_scopes(policy_scope(Book)).page(params[:page]).order(created_at: :desc)
+      @books = apply_scopes(policy_scope(Book)).page(params[:page])
     else
-      @books = apply_scopes(policy_scope(Book.favorite_books(current_user))).page(params[:page]).order(created_at: :desc)
+      @books = apply_scopes(policy_scope(Book).favorite_books(current_user)).page(params[:page])
     end
 
     respond_to do |format|
