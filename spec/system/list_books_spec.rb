@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "list books", :type => :system do
+RSpec.describe "listing books", :type => :system do
   let(:reader_user) { create(:reader) }
   let(:librarian_user) { create(:librarian) }
   let(:admin_user) { create(:admin) }
@@ -10,7 +10,7 @@ RSpec.describe "list books", :type => :system do
 
   scenario 'with reader user with pagination' do
 
-    sign_in reader_user.email, reader_user.password
+    login_as(reader_user)
 
     book_count = books.size
     expect(book_count).to eq(10)
@@ -42,7 +42,7 @@ RSpec.describe "list books", :type => :system do
   end
 
   scenario 'with librarian user with pagination' do
-    sign_in librarian_user.email, librarian_user.password
+    login_as(librarian_user)
 
     book_count = books.size
     expect(book_count).to eq(10)
@@ -74,7 +74,7 @@ RSpec.describe "list books", :type => :system do
   end
 
   scenario 'with admin user with pagination' do
-    sign_in admin_user.email, admin_user.password
+    login_as(admin_user)
 
     book_count = books.size
     expect(book_count).to eq(10)
@@ -108,7 +108,7 @@ RSpec.describe "list books", :type => :system do
 
   scenario 'with reader user without pagination' do
 
-    sign_in reader_user.email, reader_user.password
+    login_as(reader_user)
 
     expect(book.present?).to eq(true)
 
@@ -139,7 +139,7 @@ RSpec.describe "list books", :type => :system do
 
   scenario 'with reader user applying sorting' do
 
-    sign_in reader_user.email, reader_user.password
+    login_as(reader_user)
 
     book_count = books.size
     expect(book_count).to eq(10)
@@ -155,7 +155,7 @@ RSpec.describe "list books", :type => :system do
 
   scenario 'with reader user applying filter with_author' do
 
-    sign_in reader_user.email, reader_user.password
+    login_as(reader_user)
 
     book_count = books.size
     expect(book_count).to eq(10)
@@ -171,7 +171,7 @@ RSpec.describe "list books", :type => :system do
 
   scenario 'with reader user applying filter contains_text' do
 
-    sign_in reader_user.email, reader_user.password
+    login_as(reader_user)
 
     book_count = books.size
     expect(book_count).to eq(10)
@@ -193,7 +193,7 @@ RSpec.describe "list books", :type => :system do
 
   scenario 'with reader user applying filter tab favorites' do
 
-    sign_in user_with_favorite_books.email, user_with_favorite_books.password
+    login_as(user_with_favorite_books)
 
     book_count = books.size
     expect(book_count).to eq(10)
@@ -208,19 +208,6 @@ RSpec.describe "list books", :type => :system do
     books_search = Book.favorite_books(user_with_favorite_books).order(created_at: :desc).limit(5).offset(0)
     expect(books_search.size).to eq(5)
     expect(page).to have_content(books_to_string(books_search))  
-  end
-
-
-  # https://stackoverflow.com/questions/67279587/rspec-login-before-each-example-in-a-system-test
-  def sign_in(email, password)
-    visit new_user_session_path
-
-    # puts ">>> Login with #{email} and #{password}."
-    
-    fill_in 'E-mail', with: email
-    fill_in 'Senha', with: password
-
-    click_button 'Entrar'
   end
 
   def order_by(option_value)
