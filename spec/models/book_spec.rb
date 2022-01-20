@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Book, type: :model do
+  PARAMS_TO_SCRUB = ['id', 'status', 'created_at', 'updated_at']
+
   context "creating books" do
     let(:book) { build(:book) }
 
@@ -221,4 +223,96 @@ RSpec.describe Book, type: :model do
     end
   end
 
+  context 'user with reader profile' do
+    before do
+      @user = create(:reader)
+      @book = create(:book)
+    end
+    
+    it "edit active book" do
+      expect(@user.profile.reader?).to eq(true)
+
+      book_new = build(:book)
+     @book.edit(@user, book_new.attributes.except!(*PARAMS_TO_SCRUB))
+      @book.reload
+
+      expect(@book.attributes.except!(*PARAMS_TO_SCRUB)).to_not eq(book_new.attributes.except!(*PARAMS_TO_SCRUB))
+      expect(@book.errors).to_not be_empty
+    end
+
+    it "edit inactive book" do
+      expect(@user.profile.reader?).to eq(true)
+
+      @book.remove(@user)
+
+      book_new = build(:book)
+     @book.edit(@user, book_new.attributes.except!(*PARAMS_TO_SCRUB))
+      @book.reload
+
+      expect(@book.attributes.except!(*PARAMS_TO_SCRUB)).to_not eq(book_new.attributes.except!(*PARAMS_TO_SCRUB))
+      expect(@book.errors).to_not be_empty
+    end
+  end
+
+  context 'user with librarian profile' do
+    before do
+      @user = create(:librarian)
+      @book = create(:book)
+    end
+    
+    it "edit active book" do
+      expect(@user.profile.librarian?).to eq(true)
+
+      book_new = build(:book)
+     @book.edit(@user, book_new.attributes.except!(*PARAMS_TO_SCRUB))
+      @book.reload
+
+      expect(@book.attributes.except!(*PARAMS_TO_SCRUB)).to eq(book_new.attributes.except!(*PARAMS_TO_SCRUB))
+      expect(@book.errors).to be_empty
+    end
+
+    it "edit inactive book" do
+      expect(@user.profile.librarian?).to eq(true)
+
+      @book.remove(@user)
+
+      book_new = build(:book)
+     @book.edit(@user, book_new.attributes.except!(*PARAMS_TO_SCRUB))
+      @book.reload
+
+      expect(@book.attributes.except!(*PARAMS_TO_SCRUB)).to_not eq(book_new.attributes.except!(*PARAMS_TO_SCRUB))
+      expect(@book.errors).to_not be_empty
+    end
+  end
+
+  context 'user with admin profile' do
+    before do
+      @user = create(:admin)
+      @book = create(:book)
+    end
+    
+    it "edit active book" do
+      expect(@user.profile.admin?).to eq(true)
+
+      book_new = build(:book)
+      @book.edit(@user, book_new.attributes.except!(*PARAMS_TO_SCRUB))
+      @book.reload
+
+      expect(@book.attributes.except!(*PARAMS_TO_SCRUB)).to eq(book_new.attributes.except!(*PARAMS_TO_SCRUB))
+      expect(@book.errors).to be_empty
+    end
+
+    it "edit inactive book" do
+      expect(@user.profile.admin?).to eq(true)
+
+      @book.remove(@user)
+
+      book_new = build(:book)
+      @book.edit(@user, book_new.attributes.except!(*PARAMS_TO_SCRUB))
+      @book.reload
+
+      expect(@book.attributes.except!(*PARAMS_TO_SCRUB)).to_not eq(book_new.attributes.except!(*PARAMS_TO_SCRUB))
+      expect(@book.errors).to_not be_empty
+    end
+  end
 end

@@ -48,12 +48,33 @@ class Book < ApplicationRecord
   end
 
   def remove(user)
-    if is_not_reader?(user) && self.status.active?
-      self.status = :inactive
-      self.save!
-    else
-      self.errors.add(:base, "O livro já foi removido")
+    begin
+      if is_not_reader?(user) && self.status.active?
+        self.status = :inactive
+        self.save!
+      else
+        self.errors.add(:base, "O livro já foi removido")
+        return false
+      end
+    rescue
+      self.errors.add(:base, "Não foi possível excluír o livro")
+      return false
     end
+  end
+
+  def edit(user, book_params)
+    begin
+      if is_not_reader?(user) && self.status.active?
+        self.assign_attributes(book_params)
+          self.save!
+        else
+          self.errors.add(:base, "O livro não pode ser atualizado, pois já foi removido")
+          return false
+        end
+      rescue
+        self.errors.add(:base, "Não foi possível editar o livro")
+        return false
+      end
   end
 
   def self.favorite_books(user)
