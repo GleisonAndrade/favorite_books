@@ -8,6 +8,7 @@ require 'rspec/rails'
 require 'devise'
 require 'support/factory_bot'
 require_relative 'support/controller_macros'
+require_relative 'support/capybara_helpers'
 
 begin
   ActiveRecord::Migration.maintain_test_schema!
@@ -41,6 +42,8 @@ RSpec.configure do |config|
   config.extend ControllerMacros, :type => :controller
   config.extend ControllerMacros, :type => :feature
   config.extend ControllerMacros, :type => :system
+
+  config.include CapybaraHelpers, type: :system
 end
 
 # Shoulda::Matchers.configure do |config|
