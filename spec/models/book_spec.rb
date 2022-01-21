@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Book, type: :model do
   PARAMS_TO_SCRUB = ['id', 'status', 'created_at', 'updated_at']
 
-  context "creating books" do
+  context "book validations" do
     let(:book) { build(:book) }
 
     it "is valid with valid attributes" do
@@ -72,6 +72,20 @@ RSpec.describe Book, type: :model do
       expect(book.follow?(@user)).to eq(true)
     end
 
+    it "set as favorite with invalid book" do
+      expect(@user.profile.reader?).to eq(true)
+
+      book = create(:book)
+      book.title = nil
+      book.favorite(@user)
+      book.reload
+
+      expect(book.errors).to_not be_empty
+      expect(book.favorite?(@user)).to eq(false)
+      expect(book.follow?(@user)).to eq(false)
+      expect(book.errors.full_messages.include?('Não foi possível adicionar o livro aos favoritos')).to eq(true)
+    end
+
     it "remove book from favorites" do
       book = create(:book)
       book.favorite(@user)
@@ -129,6 +143,7 @@ RSpec.describe Book, type: :model do
       expect(book.errors).to_not be_empty
       expect(book.favorite?(@user)).to eq(false)
       expect(book.follow?(@user)).to eq(false)
+      expect(book.errors.full_messages.include?('Apenas usuários leitores podem realizar essa ação')).to eq(true)
     end
 
     it "remove book from favorites" do
@@ -221,6 +236,18 @@ RSpec.describe Book, type: :model do
       expect(@book.status).to eq(:inactive)
       expect(@book.errors).to_not be_empty
     end
+
+    it "remove invalid book" do
+      expect(@user.profile.admin?).to eq(true)
+
+      @book.title = nil
+      @book.remove(@user)
+      @book.reload
+
+      expect(@book.status).to eq(:active)
+      expect(@book.errors).to_not be_empty
+      expect(@book.errors.full_messages.include?('Não foi possível excluír o livro')).to eq(true)
+    end
   end
 
   context 'user with reader profile' do
@@ -313,6 +340,22 @@ RSpec.describe Book, type: :model do
 
       expect(@book.attributes.except!(*PARAMS_TO_SCRUB)).to_not eq(book_new.attributes.except!(*PARAMS_TO_SCRUB))
       expect(@book.errors).to_not be_empty
+      expect(@book.errors.full_messages.include?('O livro não pode ser atualizado, pois já foi removido')).to eq(true)
+    end
+    
+    it "edit invalid book" do
+      expect(@user.profile.admin?).to eq(true)
+      
+      book_new = build(:book)
+      book_params = book_new.attributes.except!(*PARAMS_TO_SCRUB)
+      book_params['title'] = nil
+      
+      @book.edit(@user, book_params)
+      @book.reload
+      
+      expect(@book.attributes.except!(*PARAMS_TO_SCRUB)).to_not eq(book_params)
+      expect(@book.errors).to_not be_empty
+      expect(@book.errors.full_messages.include?('Não foi possível editar o livro')).to eq(true)
     end
   end
 end
