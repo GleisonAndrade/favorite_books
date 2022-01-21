@@ -63,19 +63,33 @@ class Book < ApplicationRecord
     end
   end
 
+  def create(user, book_params)
+    begin
+      if is_not_reader?(user)
+        self.assign_attributes(book_params)
+        return self.save!
+      end
+    rescue
+      self.errors.add(:base, "Não foi possível cadastrar o livro")
+      return false
+    end
+
+    false
+  end
+
   def edit(user, book_params)
     begin
       if is_not_reader?(user) && self.status.active?
         self.assign_attributes(book_params)
-          self.save!
-        else
-          self.errors.add(:base, "O livro não pode ser atualizado, pois já foi removido")
-          return false
-        end
-      rescue
-        self.errors.add(:base, "Não foi possível editar o livro")
+        return self.save!
+      else
+        self.errors.add(:base, "O livro não pode ser atualizado, pois já foi removido")
         return false
       end
+    rescue
+      self.errors.add(:base, "Não foi possível editar o livro")
+      return false
+    end
   end
 
   def self.favorite_books(user)

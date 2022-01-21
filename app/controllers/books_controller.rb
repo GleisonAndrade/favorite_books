@@ -33,10 +33,10 @@ class BooksController < ApplicationController
 
   # POST /books or /books.json
   def create
-    @book = Book.new(book_params)
+    @book = Book.new
 
     respond_to do |format|
-      if @book.save
+      if @book.create(current_user, book_params)
         format.html { redirect_to book_url(@book), notice: "O livro #{@book.title} foi cadastrado com sucesso." }
         format.json { render :show, status: :created, location: @book }
       else
