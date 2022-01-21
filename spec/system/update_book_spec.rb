@@ -28,11 +28,11 @@ RSpec.describe "updating a book", :type => :system do
     expect(page).to have_content(book.title)
     expect(page).to have_content(book.author)
     expect(page).to have_content(book.page_count)
-    expect(page).to have_content("#{I18n.l book.created_at, format: "%d de %B"}#{ I18n.l book.created_at, format: "%H:%M" }")
+    expect(page).to have_content("#{I18n.l book.created_at, format: "%d de %B"}#{ I18n.l book.created_at, format: "%H:%M" }") # without \n in datetime separation
     expect(page).to have_content(book.status_text)
 
     expect(page).to_not have_link('', href: "/books/#{book.id}/edit", class: 'btn btn-outline-secondary')
-    expect(page).to_not have_link('', href: "/books/#{book.id}", class: 'btn btn-outline-danger')
+    # expect(page).to_not have_link('', href: "/books/#{book.id}", class: 'btn btn-outline-danger')
 
     visit edit_book_path(book)    
     expect(page.current_path).to eq books_path
