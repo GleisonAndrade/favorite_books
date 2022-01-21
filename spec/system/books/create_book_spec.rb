@@ -18,7 +18,7 @@ RSpec.describe "creating a book", :type => :system do
   scenario 'with valid inputs' do
     login_as(librarian_user)
 
-    fill_book(book)
+    create_book(book)
 
     expect(page.current_path).to eq book_path(Book.last)
     expect(page).to have_content("O livro #{book.title} foi cadastrado com sucesso.")
@@ -28,7 +28,7 @@ RSpec.describe "creating a book", :type => :system do
     login_as(librarian_user)
 
     book.title = nil
-    fill_book(book)
+    create_book(book)
 
     expect(page.current_path).to eq books_path
     expect(page).to have_content("Título não pode ficar em branco e Título é muito curto (mínimo: 3 caracteres)")
@@ -38,7 +38,7 @@ RSpec.describe "creating a book", :type => :system do
     login_as(librarian_user)
 
     book.title = 'ab'
-    fill_book(book)
+    create_book(book)
 
     expect(page.current_path).to eq books_path
     expect(page).to have_content("Título é muito curto (mínimo: 3 caracteres)")
@@ -48,7 +48,7 @@ RSpec.describe "creating a book", :type => :system do
     login_as(librarian_user)
 
     book.description = nil
-    fill_book(book)
+    create_book(book)
 
     expect(page.current_path).to eq books_path
     expect(page).to have_content("Descrição não pode ficar em branco e Descrição é muito curto (mínimo: 3 caracteres)")
@@ -58,7 +58,7 @@ RSpec.describe "creating a book", :type => :system do
     login_as(librarian_user)
 
     book.description = 'ab'
-    fill_book(book)
+    create_book(book)
 
     expect(page.current_path).to eq books_path
     expect(page).to have_content("Descrição é muito curto (mínimo: 3 caracteres)")
@@ -68,7 +68,7 @@ RSpec.describe "creating a book", :type => :system do
     login_as(librarian_user)
 
     book.image_url = nil
-    fill_book(book)
+    create_book(book)
 
     expect(page.current_path).to eq books_path
     expect(page).to have_content("URL da capa não pode ficar em branco")
@@ -78,7 +78,7 @@ RSpec.describe "creating a book", :type => :system do
     login_as(librarian_user)
 
     book.page_count = nil
-    fill_book(book)
+    create_book(book)
 
     expect(page.current_path).to eq books_path
     expect(page).to have_content("Quantidade de páginas não pode ficar em branco e Quantidade de páginas não é um número")
@@ -88,7 +88,7 @@ RSpec.describe "creating a book", :type => :system do
     login_as(librarian_user)
 
     book.page_count = 0
-    fill_book(book)
+    create_book(book)
 
     expect(page.current_path).to eq books_path
     expect(page).to have_content("Quantidade de páginas deve ser maior que 0")
@@ -98,7 +98,7 @@ RSpec.describe "creating a book", :type => :system do
     login_as(librarian_user)
 
     book.author = nil
-    fill_book(book)
+    create_book(book)
 
     expect(page.current_path).to eq books_path
     expect(page).to have_content("Autor não pode ficar em branco e Autor é muito curto (mínimo: 3 caracteres)")
@@ -108,25 +108,9 @@ RSpec.describe "creating a book", :type => :system do
     login_as(librarian_user)
 
     book.author = 'ab'
-    fill_book(book)
+    create_book(book)
 
     expect(page.current_path).to eq books_path
     expect(page).to have_content("Autor é muito curto (mínimo: 3 caracteres)")
-  end
-
-  def fill_book(book)
-    visit books_path
-    click_on 'Novo Livro'
-
-    expect(page).to have_content('Novo Livro')
-
-    fill_in 'book_title', with: book.title
-    fill_in 'book_description', with: book.description
-    fill_in 'book_image_url', with: book.image_url
-    fill_in 'book_page_count', with: book.page_count
-    fill_in 'book_author', with: book.author
-
-    click_button 'Criar Livro'
-    # find('#button_submit_form').click
   end
 end

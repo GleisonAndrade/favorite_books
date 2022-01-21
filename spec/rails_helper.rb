@@ -6,9 +6,9 @@ require File.expand_path('../config/environment', __dir__)
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'rspec/rails'
 require 'devise'
-require 'support/factory_bot'
-require_relative 'support/controller_macros'
-require_relative 'support/capybara_helpers'
+
+# Requires supporrting ruby files with custom matchers and macros, etc.
+Dir[File.join(File.dirname(__FILE__), 'support', '**', '*.rb')].sort.each { |f| require f }
 
 begin
   ActiveRecord::Migration.maintain_test_schema!
@@ -40,10 +40,11 @@ RSpec.configure do |config|
   config.include Warden::Test::Helpers
 
   config.extend ControllerMacros, :type => :controller
-  config.extend ControllerMacros, :type => :feature
   config.extend ControllerMacros, :type => :system
 
   config.include CapybaraHelpers, type: :system
+  config.include UsersHelpers, type: :system
+  config.include BooksHelpers, type: :system
 end
 
 # Shoulda::Matchers.configure do |config|

@@ -210,47 +210,4 @@ RSpec.describe "listing books", :type => :system, js: true do
     expect(books_search.size).to eq(5)
     expect(page).to have_content(books_to_string(books_search))  
   end
-
-  def order_by(option_value)
-    options = {
-      "OrderByCreatedAtDesc": "Recentemente adicionado",
-      "OrderByCreatedAtAsc": "Mais antigo",
-      "OrderByTitleAsc": "Título A-Z",
-      "OrderByTitleDesc": "Título Z-A"
-    }
-
-    select(options[option_value.to_sym], from: 'order_by')
-
-    books_search = Book.order_by(option_value).limit(5).offset(0)
-    expect(page).to have_content(books_to_string(books_search))
-
-    click_link '2', class: 'page-link'
-
-    books_search = Book.order_by(option_value).limit(5).offset(5)
-    expect(page).to have_content(books_to_string(books_search))
-  end
-
-  def with_author(author)
-    fill_in 'with_author', with: author
-
-    books_search = Book.with_author(author).order(created_at: :desc).limit(5).offset(0)
-    expect(page).to have_content(books_to_string(books_search))
-  end
-
-  def contains_text(text)
-    fill_in 'contains_text', with: text
-
-    books_search = Book.contains_text(text).order(created_at: :desc).limit(5).offset(0)
-    expect(page).to have_content(books_to_string(books_search))
-  end
-
-  def books_to_string(books)
-    string_books = ""
-
-    books.each do |book|
-      string_books = string_books + "#{book.title} #{book.author} #{book.page_count} #{I18n.l book.created_at, format: "%d de %B"}\n#{ I18n.l book.created_at, format: "%H:%M" }\n"
-    end
-
-    string_books
-  end
 end

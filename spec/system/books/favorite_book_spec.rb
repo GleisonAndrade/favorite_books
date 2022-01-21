@@ -70,48 +70,4 @@ RSpec.describe "favorite books", :type => :system, js: true do
     expect(book.favorite?(reader_user)).to eq(false)
   end
 
-  def add_favorite(book, user)
-    visit books_path
-    expect(page).to have_content('Livros')
-
-    is_favorite = book.favorite?(user)
-    is_valid = book.valid?
-
-    have_book(book)
-
-    find(:xpath, "//a[@href='/books/#{book.id}/favorite']").click
-
-    wait_for_ajax
-
-    if is_favorite
-      click_link 'Favoritos', class: 'flex-sm-fill text-sm-center nav-link'
-      wait_for_ajax
-      
-      if is_valid 
-        have_not_book(book, with_page_count: false)
-      else
-        have_book(book)
-      end
-    else
-      click_link 'Favoritos', class: 'flex-sm-fill text-sm-center nav-link'
-      wait_for_ajax
-      
-      if is_valid 
-        have_book(book)
-      else
-        have_not_book(book, with_page_count: false)
-      end
-    end
-  end
-
-  def add_favorite_without_permission(book, user)
-    visit books_path
-    expect(page).to have_content('Livros')
-
-    have_book(book)
-
-    expect(page).to_not have_link('', href: "/books/#{book.id}/favorite")
-    expect(page).to_not have_selector("#nav-bar-books")
-  end
-
 end
