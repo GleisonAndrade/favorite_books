@@ -27,6 +27,7 @@ Esse é um sistema simples de gerenciamento de livros favoritos. Ele terá três
  13. Factory Bot
  14. Faker
  15. Simplecov
+ 16. RubyCritic
  
 ## Principais funcionalidades
 
@@ -37,20 +38,19 @@ Esse é um sistema simples de gerenciamento de livros favoritos. Ele terá três
  - [x] Favoritar livro (*read*);
  - [ ] Seguir livro (*read*);
  - [ ] Registrar leitura (*read*);
+ - [ ] CRUD categoria;
+ - [ ] Alertas;
+ - [ ] Configurar docker;
 
 ## Pendências
 
  - [x] Documentação geral do sistema (README);
- - [ ] Bugfix tab de favoritos e todos os livros;
+ - [x] Bugfix tab de favoritos e todos os livros;
  - [ ] Remoção de code smells;
  - [ ] Extração das regras de negocio utilizando u-case para criação de uma camada de casos de uso (Clean Architecture);
  - [ ] Aplicar corretamente a internacionalização na aplicação;
- - [ ] Implementação do CRUD de usuário;
- - [ ] Implementação da funcionalidade de seguir livros;
- - [ ] Implementação da funcionalidade de registrar leitura de livro seguido;
- - [ ] Adpatar as listagens de livros para as funcionalidades de seguir e registrar leitura de livros;
  - [ ] Atualização de testes com as novas funcionalidades;
- - [ ] Teste de integração;
+ - [x] Teste de integração;
  - [ ] Transformar o sistema em uma API;
  - [ ] Implementação do frontend com React ou Vue.js;
 

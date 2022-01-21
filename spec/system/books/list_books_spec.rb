@@ -8,7 +8,7 @@ RSpec.describe "listing books", :type => :system, js: true do
   let(:books) { create_list(:book, 10) }
   let(:book) { create(:book) }
 
-  scenario 'with reader user with pagination' do
+  scenario 'with reader user and pagination' do
 
     login_as(reader_user)
 
@@ -41,7 +41,7 @@ RSpec.describe "listing books", :type => :system, js: true do
     expect(page).to_not have_link('', href: "/books/#{book.id}", class: 'btn btn-outline-danger')
   end
 
-  scenario 'with librarian user with pagination' do
+  scenario 'with librarian user and pagination' do
     login_as(librarian_user)
 
     book_count = books.size
@@ -73,7 +73,7 @@ RSpec.describe "listing books", :type => :system, js: true do
     expect(page).to have_link('', href: "/books/#{book.id}", class: 'btn btn-outline-danger')
   end
 
-  scenario 'with admin user with pagination' do
+  scenario 'with admin user and pagination' do
     login_as(admin_user)
 
     book_count = books.size

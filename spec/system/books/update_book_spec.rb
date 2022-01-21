@@ -48,7 +48,7 @@ RSpec.describe "updating a book", :type => :system do
     expect(page).to have_content("O livro #{book.title} foi atualizado com sucesso.")
   end
 
-  scenario 'with invalid input (without a title)' do
+  scenario 'with invalid input (without title)' do
     login_as(librarian_user)
 
     book.title = nil
@@ -58,7 +58,7 @@ RSpec.describe "updating a book", :type => :system do
     expect(page).to have_content("Título não pode ficar em branco e Título é muito curto (mínimo: 3 caracteres)")
   end
 
-  scenario 'with invalid input (short a title)' do
+  scenario 'with invalid input (short title)' do
     login_as(librarian_user)
 
     book.title = 'ab'
@@ -68,7 +68,7 @@ RSpec.describe "updating a book", :type => :system do
     expect(page).to have_content("Título é muito curto (mínimo: 3 caracteres)")
   end
 
-  scenario 'with invalid input (without a description)' do
+  scenario 'with invalid input (without description)' do
     login_as(librarian_user)
 
     book.description = nil
@@ -78,7 +78,7 @@ RSpec.describe "updating a book", :type => :system do
     expect(page).to have_content("Descrição não pode ficar em branco e Descrição é muito curto (mínimo: 3 caracteres)")
   end
 
-  scenario 'with invalid input (short a description)' do
+  scenario 'with invalid input (short description)' do
     login_as(librarian_user)
 
     book.description = 'ab'
@@ -88,7 +88,7 @@ RSpec.describe "updating a book", :type => :system do
     expect(page).to have_content("Descrição é muito curto (mínimo: 3 caracteres)")
   end
 
-  scenario 'with invalid input (without a image_url)' do
+  scenario 'with invalid input (without image_url)' do
     login_as(librarian_user)
 
     book.image_url = nil
@@ -98,7 +98,7 @@ RSpec.describe "updating a book", :type => :system do
     expect(page).to have_content("URL da capa não pode ficar em branco")
   end
 
-  scenario 'with invalid input (without a page_count)' do
+  scenario 'with invalid input (without page_count)' do
     login_as(librarian_user)
 
     book.page_count = nil
@@ -118,7 +118,7 @@ RSpec.describe "updating a book", :type => :system do
     expect(page).to have_content("Quantidade de páginas deve ser maior que 0")
   end
 
-  scenario 'with invalid input (without a author)' do
+  scenario 'with invalid input (without author)' do
     login_as(librarian_user)
 
     book.author = nil
@@ -128,7 +128,7 @@ RSpec.describe "updating a book", :type => :system do
     expect(page).to have_content("Autor não pode ficar em branco e Autor é muito curto (mínimo: 3 caracteres)")
   end
 
-  scenario 'with invalid input (short a author)' do
+  scenario 'with invalid input (short author)' do
     login_as(librarian_user)
 
     book.author = 'ab'
