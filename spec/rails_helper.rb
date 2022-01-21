@@ -6,8 +6,9 @@ require File.expand_path('../config/environment', __dir__)
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'rspec/rails'
 require 'devise'
-require 'support/factory_bot'
-require_relative 'support/controller_macros'
+
+# Requires supporrting ruby files with custom matchers and macros, etc.
+Dir[File.join(File.dirname(__FILE__), 'support', '**', '*.rb')].sort.each { |f| require f }
 
 begin
   ActiveRecord::Migration.maintain_test_schema!
@@ -18,6 +19,14 @@ end
 
 RSpec.configure do |config|
   # config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  config.before(:each, type: :system) do
+    driven_by :rack_test
+  end
+
+  # JavaScript support
+  config.before(:each, type: :system, js: true) do
+    driven_by :selenium_chrome_headless
+  end
 
   config.use_transactional_fixtures = true
 
@@ -27,6 +36,20 @@ RSpec.configure do |config|
 
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::Test::IntegrationHelpers, type: :feature
+  config.include Devise::Test::IntegrationHelpers, type: :system
+  config.include Warden::Test::Helpers
 
   config.extend ControllerMacros, :type => :controller
+  config.extend ControllerMacros, :type => :system
+
+  config.include CapybaraHelpers, type: :system
+  config.include UsersHelpers, type: :system
+  config.include BooksHelpers, type: :system
 end
+
+# Shoulda::Matchers.configure do |config|
+#   config.integrate do |with|
+#     with.test_framework :rspec
+#     with.library :rails
+#   end
+# end

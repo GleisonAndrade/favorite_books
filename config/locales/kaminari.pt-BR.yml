@@ -28,7 +28,7 @@ pt-BR:
     page_entries_info:
       one_page:
         display_entries:
-          zero: "Nenhum item encontrado"
+          zero: "Não foram encontrados %{entry_name}"
           one: "<b>1</b>"
           other: "<b>todos %{count}</b>"
       more_pages:

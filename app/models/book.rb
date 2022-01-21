@@ -32,11 +32,12 @@ class Book < ApplicationRecord
   def favorite(user)
     if is_reader?(user)
       if favorite?(user)
-        remove_favorite(user)
+        return remove_favorite(user)
       else
-        add_favorite(user)
+        return add_favorite(user)
       end
     end
+    false
   end
 
   def favorite?(user)
@@ -48,11 +49,46 @@ class Book < ApplicationRecord
   end
 
   def remove(user)
-    if is_not_reader?(user) && self.status.active?
-      self.status = :inactive
-      self.save!
-    else
-      self.errors.add(:base, "O livro já foi removido")
+    begin
+      if is_not_reader?(user) && self.status.active?
+        self.status = :inactive
+        return self.save!
+      else
+        self.errors.add(:base, "O livro já foi removido")
+        return false
+      end
+    rescue
+      self.errors.add(:base, "Não foi possível excluír o livro")
+      return false
+    end
+  end
+
+  def create(user, book_params)
+    begin
+      if is_not_reader?(user)
+        self.assign_attributes(book_params)
+        return self.save!
+      end
+    rescue
+      self.errors.add(:base, "Não foi possível cadastrar o livro")
+      return false
+    end
+
+    false
+  end
+
+  def edit(user, book_params)
+    begin
+      if is_not_reader?(user) && self.status.active?
+        self.assign_attributes(book_params)
+        return self.save!
+      else
+        self.errors.add(:base, "O livro não pode ser atualizado, pois já foi removido")
+        return false
+      end
+    rescue
+      self.errors.add(:base, "Não foi possível editar o livro")
+      return false
     end
   end
 
@@ -93,9 +129,12 @@ class Book < ApplicationRecord
     
     def add_favorite(user)
       begin
-        create_user_book(user, true)
+        unless create_user_book(user, true)
+          self.errors.add(:base, "Não foi possível adicionar o livro aos favoritos")
+        end
       rescue
         self.errors.add(:base, "Não foi possível adicionar o livro aos favoritos")
+        return false
       end
     end
     
@@ -107,18 +146,22 @@ class Book < ApplicationRecord
         user_book.save!
       rescue
         self.errors.add(:base, "Não foi possível remover o livros dos favoritos")
+        return false
       end
     end
 
     def create_user_book(user, favorite=false)
-      user_book = UserBook.find_or_initialize_by(user: user, book: self)
+      if user.valid? && self.valid?
+        user_book = UserBook.find_or_initialize_by(user: user, book: self)
 
-      user_book.status = :added
-      user_book.pages_read = 0
-      user_book.favorite = favorite
-      user_book.created_at = Time.zone.now if user_book.present?
+        user_book.status = :added
+        user_book.pages_read = 0
+        user_book.favorite = favorite
+        user_book.created_at = Time.zone.now if user_book.present?
 
-      user_book.save!
+        return user_book.save!
+      end
+      false
     end
 
 end

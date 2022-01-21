@@ -1,0 +1,12 @@
+function replaceHtmlContent (element_id, innerHTML) {
+  const elem = document.getElementById(element_id);
+
+  if (elem){
+    elem.innerHTML = innerHTML;
+  }
+}
+
+replaceHtmlContent('books-tbody', "<%= j render @books %>");
+
+<%# var elem = document.getElementById('books-tab-favorites');
+$.rails.fire(elem, 'click'); %>

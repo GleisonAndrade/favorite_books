@@ -8,7 +8,7 @@
   <div class="row align-items-end mt-2">
     <div class="btn-group col-md-12">
       <%= link_to 'Excluír', book, class: "btn btn-danger", method: :delete, data: { confirm: 'Você deseja continuar?'} if policy(book).destroy? %>
-      <%= f.button :submit, class: "btn app-btn-primary" %>
+      <%= f.button :submit, class: "btn app-btn-primary", id: "button_submit_form" %>
       <%= link_to 'Cancelar', books_path, class: "btn app-btn-secondary" %>
     </div>
   </div>

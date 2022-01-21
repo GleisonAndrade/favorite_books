@@ -28,7 +28,7 @@ class BookPolicy < ApplicationPolicy
   end
 
   def update?
-    user.profile.admin? || user.profile.librarian?
+    !record.new_record? && record.active? && (user.profile.librarian? || user.profile.admin?)
   end
 
   def edit?
@@ -36,7 +36,7 @@ class BookPolicy < ApplicationPolicy
   end
 
   def destroy?
-    record.status.active? && (user.profile.admin? || user.profile.librarian?)
+    !record.new_record? && record.status.active? && (user.profile.admin? || user.profile.librarian?)
   end
 
   def favorite?

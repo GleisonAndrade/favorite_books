@@ -1,5 +1,12 @@
 pt-BR:
   activerecord:
+    models:
+      user:
+        one: Usuário
+        other: Usuários
+      book:
+        one: Livro
+        other: Livros
     attributes:
       user:
         name: Nome
@@ -7,7 +14,7 @@ pt-BR:
         title: Título
         description: Descrição
         image_url: URL da capa
-        page_count: Quantiade de páginas
+        page_count: Quantidade de páginas
         author: Autor
     enumerize:
       user:

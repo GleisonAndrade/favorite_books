@@ -10,14 +10,7 @@ class BooksController < ApplicationController
 
   # GET /books or /books.json
   def index
-    params[:filter] ||= 'all'
-    params[:order_by] ||= 'OrderByCreatedAtDesc'
-
-    if params[:filter] == 'all'
-      @books = apply_scopes(policy_scope(Book)).page(params[:page]).order(created_at: :desc)
-    else
-      @books = apply_scopes(policy_scope(Book.favorite_books(current_user))).page(params[:page]).order(created_at: :desc)
-    end
+    get_books
 
     respond_to do |format|
       format.js { render layout: false }
@@ -40,10 +33,10 @@ class BooksController < ApplicationController
 
   # POST /books or /books.json
   def create
-    @book = Book.new(book_params)
+    @book = Book.new
 
     respond_to do |format|
-      if @book.save
+      if @book.create(current_user, book_params)
         format.html { redirect_to book_url(@book), notice: "O livro #{@book.title} foi cadastrado com sucesso." }
         format.json { render :show, status: :created, location: @book }
       else
@@ -56,7 +49,7 @@ class BooksController < ApplicationController
   # PATCH/PUT /books/1 or /books/1.json
   def update
     respond_to do |format|
-      if @book.update(book_params)
+      if @book.edit(current_user, book_params)
         format.html { redirect_to book_url(@book), notice: "O livro #{@book.title} foi atualizado com sucesso." }
         format.json { render :show, status: :ok, location: @book }
       else
@@ -81,13 +74,28 @@ class BooksController < ApplicationController
 
   def favorite
     favorite = @book.favorite?(current_user)
-    notice = "O Livro #{@book.title} foi #{favorite ? 'removido dos favoritos' : 'adicionado aos favoritos'} com sucesso."
+    
+    if favorite
+      notice = "O Livro #{@book.title} foi removido dos favoritos com sucesso."
+      error = "Erro ao remover o Livro #{@book.title} dos favoritos."
+    else
+      notice = "O Livro #{@book.title} foi adicionado aos favoritos com sucesso."
+      error = "Erro ao adicionar o Livro #{@book.title} nos favoritos."
+    end
 
     respond_to do |format|
       if @book.favorite(current_user)
         format.html { redirect_to books_url, notice: notice }
         format.json { render :show, status: :ok, location: @book }
+        format.js { 
+          get_books 
+          render layout: false, notice: notice
+        }
       else
+        format.js { 
+          get_books 
+          render layout: false, error: error
+        }
         format.html { render :index, status: :unprocessable_entity }
         format.json { render json: @book.errors, status: :unprocessable_entity }
       end
@@ -111,5 +119,16 @@ class BooksController < ApplicationController
 
     def authorize_book_with_record
       authorize @book
+    end
+
+    def get_books
+      params[:filter] ||= 'all'
+      params[:order_by] ||= 'OrderByCreatedAtDesc'
+
+      if params[:filter] == 'all'
+        @books = apply_scopes(policy_scope(Book)).page(params[:page])
+      else
+        @books = apply_scopes(policy_scope(Book).favorite_books(current_user)).page(params[:page])
+      end
     end
 end
