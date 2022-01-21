@@ -32,11 +32,12 @@ class Book < ApplicationRecord
   def favorite(user)
     if is_reader?(user)
       if favorite?(user)
-        remove_favorite(user)
+        return remove_favorite(user)
       else
-        add_favorite(user)
+        return add_favorite(user)
       end
     end
+    false
   end
 
   def favorite?(user)

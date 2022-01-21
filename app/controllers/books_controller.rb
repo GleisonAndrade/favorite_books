@@ -10,14 +10,7 @@ class BooksController < ApplicationController
 
   # GET /books or /books.json
   def index
-    params[:filter] ||= 'all'
-    params[:order_by] ||= 'OrderByCreatedAtDesc'
-
-    if params[:filter] == 'all'
-      @books = apply_scopes(policy_scope(Book)).page(params[:page])
-    else
-      @books = apply_scopes(policy_scope(Book).favorite_books(current_user)).page(params[:page])
-    end
+    get_books
 
     respond_to do |format|
       format.js { render layout: false }
@@ -81,13 +74,28 @@ class BooksController < ApplicationController
 
   def favorite
     favorite = @book.favorite?(current_user)
-    notice = "O Livro #{@book.title} foi #{favorite ? 'removido dos favoritos' : 'adicionado aos favoritos'} com sucesso."
+    
+    if favorite
+      notice = "O Livro #{@book.title} foi removido dos favoritos com sucesso."
+      error = "Erro ao remover o Livro #{@book.title} dos favoritos."
+    else
+      notice = "O Livro #{@book.title} foi adicionado aos favoritos com sucesso."
+      error = "Erro ao adicionar o Livro #{@book.title} nos favoritos."
+    end
 
     respond_to do |format|
       if @book.favorite(current_user)
         format.html { redirect_to books_url, notice: notice }
         format.json { render :show, status: :ok, location: @book }
+        format.js { 
+          get_books 
+          render layout: false, notice: notice
+        }
       else
+        format.js { 
+          get_books 
+          render layout: false, error: error
+        }
         format.html { render :index, status: :unprocessable_entity }
         format.json { render json: @book.errors, status: :unprocessable_entity }
       end
@@ -111,5 +119,16 @@ class BooksController < ApplicationController
 
     def authorize_book_with_record
       authorize @book
+    end
+
+    def get_books
+      params[:filter] ||= 'all'
+      params[:order_by] ||= 'OrderByCreatedAtDesc'
+
+      if params[:filter] == 'all'
+        @books = apply_scopes(policy_scope(Book)).page(params[:page])
+      else
+        @books = apply_scopes(policy_scope(Book).favorite_books(current_user)).page(params[:page])
+      end
     end
 end
