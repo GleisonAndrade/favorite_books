@@ -16,10 +16,13 @@ window.$ = window.jQuery = jQuery;
 
 import "bootstrap"
 window.bootstrap = require('bootstrap');
-import "@fortawesome/fontawesome-free/js/all"
+
 require.context('../images', true)
+
+import "@fortawesome/fontawesome-free/js/all"
+
 import "./stylesheets/application"
-import "./stylesheets/favorite_books"
+// import "./stylesheets/favorite_books"
 import "./js/app"
 
 Rails.start()
