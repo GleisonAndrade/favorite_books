@@ -1,0 +1,68 @@
+# https://www.digitalocean.com/community/tutorials/containerizing-a-ruby-on-rails-application-for-development-with-docker-compose-pt
+
+# FROM ruby:3.1.0-alpine3.15
+FROM ruby:3.1.0-alpine
+
+ENV APP_PATH /var/app
+ENV BUNDLE_VERSION 2.2.22
+ENV BUNDLE_PATH /usr/local/bundle/gems
+ENV TMP_PATH /tmp/
+ENV RAILS_LOG_TO_STDOUT true
+ENV RAILS_PORT 3000
+
+# copy entrypoint scripts and grant execution permissions
+# COPY ./dev-docker-entrypoint.sh /usr/local/bin/dev-entrypoint.sh
+# COPY ./test-docker-entrypoint.sh /usr/local/bin/test-entrypoint.sh
+# RUN chmod +x /usr/local/bin/dev-entrypoint.sh && chmod +x /usr/local/bin/test-entrypoint.sh
+
+# install dependencies for application
+RUN apk add --update --no-cache \
+      binutils-gold \
+      build-base \
+      curl \
+      file \
+      g++ \
+      gcc \
+      git \
+      less \
+      libstdc++ \
+      libffi-dev \
+      libc-dev \
+      linux-headers \
+      libxml2-dev \
+      libxslt-dev \
+      libgcrypt-dev \
+      make \
+      netcat-openbsd \
+      nodejs \
+      openssl \
+      pkgconfig \
+      postgresql-dev \
+      python \
+      tzdata \
+      yarn
+
+
+RUN gem install bundler --version "$BUNDLE_VERSION" \
+&& rm -rf $GEM_HOME/cache/*
+
+# navigate to app directory
+WORKDIR $APP_PATH
+
+COPY Gemfile Gemfile.lock ./
+
+RUN bundle config build.nokogiri --use-system-libraries
+
+RUN bundle check || bundle install
+
+COPY package.json yarn.lock ./
+
+RUN yarn install --check-files
+
+# EXPOSE $RAILS_PORT
+
+# ENTRYPOINT [ "bundle", "exec" ]
+
+COPY . ./
+
+ENTRYPOINT ["./entrypoints/docker-entrypoint.sh"]

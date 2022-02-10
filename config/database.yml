@@ -1,26 +1,22 @@
 default: &default
   adapter: postgresql
   encoding: unicode
+  database: <%= ENV['DATABASE_NAME'] %>
+  username: <%= ENV['DATABASE_USER'] %>
+  password: <%= ENV['DATABASE_PASSWORD'] %>
+  port: <%= ENV['DATABASE_PORT'] || '5432' %>
+  host: <%= ENV['DATABASE_HOST'] || 'localhost' %>
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
 
 development:
   <<: *default
   database: favorite_books_development
-  host: localhost
-  port: 5432
-  user: <%= ENV['DATABASE_USER'] %>
-  password: <%= ENV['DATABASE_PASSWORD'] %>
 
 test:
   <<: *default
   database: favorite_books_test
-  host: localhost
-  port: 5432
-  user: <%= ENV['DATABASE_USER'] %>
-  password: <%= ENV['DATABASE_PASSWORD'] %>
   
 production:
   <<: *default
   database: favorite_books_production
-  username: favorite_books
-  password: <%= ENV['FAVORITE_BOOKS_DATABASE_PASSWORD'] %>
