@@ -1,6 +1,6 @@
-FROM ruby:3.1.0-alpine3.15
+FROM ruby:3.0.3-alpine3.15
 
-ENV BUNDLER_VERSION=2.2.22
+ENV BUNDLER_VERSION=2.2.32
 
 RUN apk add --update --no-cache \
       binutils-gold \
