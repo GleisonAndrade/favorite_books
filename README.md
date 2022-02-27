@@ -40,7 +40,7 @@ Esse é um sistema simples de gerenciamento de livros favoritos. Ele terá três
  - [ ] Registrar leitura (*read*);
  - [ ] CRUD categoria;
  - [ ] Alertas;
- - [ ] Configurar docker;
+ - [x] Configurar docker;
 
 ## Pendências
 
